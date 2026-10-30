@@ -1,0 +1,260 @@
+---
+import type { Locale } from '../../i18n/config'
+import Icon from '../ui/icon.astro'
+import type { IconName } from '../ui/icons'
+
+export interface TabItem {
+  id: string
+  label: string
+  href: string
+  icon: IconName
+  /** Section ids this tab highlights while they are on screen. Omit for links to another page. */
+  sections?: string[]
+  /** Desk variant: tab colour. */
+  tone?: 'yellow' | 'cream' | 'navy'
+  /** Home variant: the raised "Desk" sticker tab. */
+  feature?: boolean
+  /** Per-language targets for links to the other section (rewritten to the saved language). */
+  hrefs?: Record<Locale, string>
+}
+
+interface Props {
+  variant: 'home' | 'desk'
+  label: string
+  items: TabItem[]
+  /** Tab to highlight once the page is scrolled to the very bottom. */
+  bottomTab?: string
+}
+
+const { variant, label, items, bottomTab } = Astro.props
+const [first] = items
+---
+
+<div class:list={['tab-spacer', `tab-spacer--${variant}`]} aria-hidden="true"></div>
+<nav
+  class:list={['tab-bar', `tab-bar--${variant}`]}
+  aria-label={label}
+  data-tab-bar
+  data-bottom-tab={bottomTab}
+  data-testid="tab-bar"
+>
+  {
+    items.map((item) => (
+      <a
+        class:list={['tab', item.tone && `tab--${item.tone}`, { 'tab--feature': item.feature }]}
+        href={item.href}
+        data-tab={item.id}
+        data-sections={item.sections?.join(' ')}
+        data-href-en={item.hrefs?.en}
+        data-href-my={item.hrefs?.my}
+        aria-current={item === first ? 'location' : undefined}
+      >
+        <Icon name={item.icon} strokeWidth={1.9} />
+        <span>{item.label}</span>
+      </a>
+    ))
+  }
+</nav>
+
+<script>
+  import '../../scripts/section-spy'
+</script>
+
+<style>
+  .tab-bar,
+  .tab-spacer {
+    display: none;
+  }
+
+  .tab {
+    -webkit-tap-highlight-color: transparent;
+  }
+
+  /* Home: flat bar with a gold marker on the active tab */
+  .tab-bar--home .tab {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 3px;
+    min-height: 56px;
+    color: var(--color-ink-muted);
+    font-size: 11.5px;
+    font-weight: 600;
+  }
+
+  .tab-bar--home .tab :global(svg) {
+    transition: transform 0.25s var(--ease-out);
+  }
+
+  .tab-bar--home .tab:active :global(svg) {
+    transform: scale(0.88);
+  }
+
+  .tab-bar--home .tab[aria-current] {
+    color: var(--color-navy);
+    font-weight: 700;
+  }
+
+  .tab-bar--home .tab[aria-current]::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 50%;
+    width: 26px;
+    height: 3px;
+    margin-left: -13px;
+    border-radius: 0 0 3px 3px;
+    background: var(--color-gold);
+  }
+
+  .tab-bar--home .tab--feature {
+    color: var(--color-navy);
+    font-family: var(--font-baloo);
+    font-size: 13px;
+    font-weight: 800;
+  }
+
+  .tab-bar--home .tab--feature :global(svg) {
+    box-sizing: border-box;
+    width: 34px;
+    height: 28px;
+    padding: 3px 7px;
+    border: 2px solid var(--color-navy);
+    border-radius: 9px;
+    background: var(--color-desk-yellow);
+    box-shadow: 2px 2px 0 var(--color-navy);
+    transform: rotate(-4deg);
+  }
+
+  .tab-bar--home .tab--feature:active :global(svg) {
+    transform: rotate(-4deg) translate(2px, 2px);
+    box-shadow: 0 0 0 var(--color-navy);
+  }
+
+  :global(html[lang='my']) .tab-bar--home .tab {
+    font-size: 12px;
+  }
+
+  /* Promise Desk: colourful folder tabs that rise when active */
+  .tab-bar--desk .tab {
+    --tab-bg: var(--color-card);
+    --tab-fg: var(--color-navy);
+    position: relative;
+    z-index: 1;
+    pointer-events: auto;
+    flex: 1 1 0;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 1px;
+    padding: 9px 2px calc(30px + env(safe-area-inset-bottom));
+    border: 2px solid var(--color-navy);
+    border-bottom: none;
+    border-radius: 14px 14px 0 0;
+    background: var(--tab-bg);
+    color: var(--tab-fg);
+    font-family: var(--font-display);
+    font-size: 13px;
+    font-weight: 700;
+    line-height: 1.1;
+    text-align: center;
+    transform: translateY(14px);
+    transition: transform 0.35s var(--ease-pop);
+  }
+
+  .tab-bar--desk .tab--yellow {
+    --tab-bg: var(--color-desk-yellow);
+  }
+
+  .tab-bar--desk .tab--navy {
+    --tab-bg: var(--color-navy);
+    --tab-fg: var(--color-cream);
+  }
+
+  .tab-bar--desk .tab:hover {
+    color: var(--tab-fg);
+  }
+
+  .tab-bar--desk .tab[aria-current] {
+    transform: translateY(0);
+    font-weight: 800;
+    box-shadow: 0 -3px 0 rgb(30 49 82 / 0.12);
+  }
+
+  .tab-bar--desk .tab:active {
+    transform: translateY(8px);
+  }
+
+  .tab-bar--desk .tab:focus-visible {
+    outline-color: var(--color-desk-yellow);
+    outline-offset: -5px;
+  }
+
+  :global(html[lang='my']) .tab-bar--desk .tab {
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  @media (max-width: 767px) {
+    .tab-bar--home {
+      display: grid;
+      grid-template-columns: repeat(5, minmax(0, 1fr));
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      padding: 2px 4px env(safe-area-inset-bottom);
+      border-top: 1.5px solid var(--color-navy);
+      background: var(--color-paper);
+      box-shadow: 0 -8px 24px rgb(30 49 82 / 0.08);
+    }
+
+    .tab-spacer--home {
+      display: block;
+      height: calc(62px + env(safe-area-inset-bottom));
+      background: var(--color-navy-deep);
+    }
+
+    .tab-bar--desk {
+      display: flex;
+      align-items: flex-end;
+      gap: 5px;
+      position: fixed;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 50;
+      padding: 0 8px;
+      pointer-events: none;
+    }
+
+    .tab-bar--desk::after {
+      content: '';
+      position: absolute;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: 2;
+      height: calc(10px + env(safe-area-inset-bottom));
+      background: var(--color-navy);
+      pointer-events: none;
+    }
+
+    .tab-spacer--desk {
+      display: block;
+      height: calc(84px + env(safe-area-inset-bottom));
+      background: var(--color-navy);
+    }
+  }
+
+  @media print {
+    .tab-bar,
+    .tab-spacer {
+      display: none !important;
+    }
+  }
+</style>

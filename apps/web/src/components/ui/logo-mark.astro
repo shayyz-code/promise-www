@@ -1,0 +1,113 @@
+---
+/*
+ * The interlocking "P" mark. Two strokes cross; the crossing is drawn by masking with the background
+ * colour (`--logo-cut`), so the tone must match what the mark sits on.
+ */
+interface Props {
+  /** default: navy and gold on cream · inverse: cream and gold on deep navy · mono: white on black */
+  tone?: 'default' | 'inverse' | 'mono'
+  /** Animate the strokes drawing in on load (home hero seam). */
+  draw?: boolean
+  class?: string
+}
+
+const { tone = 'default', draw = false, class: className } = Astro.props
+---
+
+<svg
+  class:list={['logo-mark', `logo-mark--${tone}`, { 'logo-mark--draw': draw }, className]}
+  viewBox="46 -16 152 208"
+  aria-hidden="true"
+>
+  <g fill="none" stroke-width="20" stroke-linecap="round">
+    <path class="logo-mark__primary" pathLength="1" d="M64 176V72A40 40 0 1 1 89.02 109.09"></path>
+    <path class="logo-mark__accent" pathLength="1" d="M180 0V104A40 40 0 1 1 154.98 66.91"></path>
+  </g>
+  <g class="logo-mark__weave" fill="none" stroke-width="20">
+    <path class="logo-mark__cut" d="M114.29 73.36A40 40 0 0 1 154.98 66.91" stroke-width="32"></path>
+    <circle class="logo-mark__cut-dot" cx="154.98" cy="66.91" r="15"></circle>
+    <path class="logo-mark__accent" d="M114.29 73.36A40 40 0 0 1 154.98 66.91" stroke-linecap="round"
+    ></path>
+    <path class="logo-mark__cut" d="M129.71 102.64A40 40 0 0 1 89.02 109.09" stroke-width="32"></path>
+    <circle class="logo-mark__cut-dot" cx="89.02" cy="109.09" r="15"></circle>
+    <path class="logo-mark__primary" d="M129.71 102.64A40 40 0 0 1 89.02 109.09" stroke-linecap="round"
+    ></path>
+  </g>
+</svg>
+
+<style>
+  .logo-mark {
+    display: block;
+    flex-shrink: 0;
+  }
+
+  .logo-mark--default {
+    --logo-primary: var(--color-navy);
+    --logo-accent: var(--color-gold);
+    --logo-cut: var(--color-cream);
+  }
+
+  .logo-mark--inverse {
+    --logo-primary: var(--color-cream);
+    --logo-accent: var(--color-gold);
+    --logo-cut: var(--color-navy-deep);
+  }
+
+  .logo-mark--mono {
+    --logo-primary: var(--color-white);
+    --logo-accent: var(--color-white);
+    --logo-cut: var(--color-black);
+  }
+
+  .logo-mark__primary {
+    stroke: var(--logo-primary);
+  }
+
+  .logo-mark__accent {
+    stroke: var(--logo-accent);
+  }
+
+  .logo-mark__cut {
+    stroke: var(--logo-cut);
+  }
+
+  .logo-mark__cut-dot {
+    fill: var(--logo-cut);
+  }
+
+  /* Draw-in: the two strokes trace themselves, then the weave fades in over the crossing. */
+  .logo-mark--draw g:first-child path {
+    stroke-dasharray: 1;
+    animation: logo-draw 1.5s var(--ease-in-out) both;
+  }
+
+  .logo-mark--draw g:first-child .logo-mark__primary {
+    animation-delay: 0.7s;
+  }
+
+  .logo-mark--draw g:first-child .logo-mark__accent {
+    animation-delay: 1.1s;
+  }
+
+  .logo-mark--draw .logo-mark__weave {
+    animation: logo-fade 0.5s ease 2.45s both;
+  }
+
+  @keyframes logo-draw {
+    from {
+      stroke-dashoffset: 1;
+    }
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  @keyframes logo-fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+</style>
