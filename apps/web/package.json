@@ -9,6 +9,7 @@
     "typecheck": "astro check",
     "test": "bun test",
     "test:e2e": "playwright test",
+    "test:e2e:fast": "playwright test --project=desktop-chromium --project=mobile-chromium",
     "test:e2e:deployed": "playwright test --config playwright.deployed.config.ts",
     "lhci": "lhci autorun",
     "og:generate": "node scripts/generate-og.ts",
