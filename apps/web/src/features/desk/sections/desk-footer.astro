@@ -1,0 +1,117 @@
+---
+import type { Business } from '@promise-www/content'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import { copyrightYear, developer } from '../../../lib/site'
+import type { DeskLinks } from '../desk-links'
+import { latinLang } from '../lang'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  business: Business
+  links: DeskLinks
+}
+
+const { locale, t, business, links } = Astro.props
+const common = getDictionary(locale, 'common')
+const lang = latinLang(locale)
+---
+
+<footer class="footer pd-navy">
+  <div class="pd-wrap footer__inner">
+    <span class="footer__brand" lang={lang}>
+      <span class="footer__word">Promise</span>
+      <span class="footer__chip">desk</span>
+    </span>
+    <nav class="footer__nav" aria-label={t.footNav}>
+      <a class="tap" href={links.bot.href} lang={lang}><span class="pd-link">Telegram</span></a>
+      <a class="tap" href={links.discord.href} lang={lang}><span class="pd-link">Discord</span></a>
+      <a class="tap" href={links.viber} lang={lang}><span class="pd-link">Viber</span></a>
+      <a
+        class="tap"
+        href={links.home.href}
+        data-href-en={links.home.en}
+        data-href-my={links.home.my}
+      >
+        <span class="pd-link">{t.footMain}</span>
+      </a>
+    </nav>
+    <div class="footer__legal pd-mono">
+      <span lang={lang}>© {copyrightYear} {business.name} · Promise Desk</span>
+      <span>{common.developedBy} <a class="tap footer__dev" href={developer.url}><span class="pd-link" lang={lang}>{developer.name}</span></a></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    border-top: 2px solid var(--color-navy);
+    background: var(--color-navy);
+    color: var(--color-cream);
+  }
+
+  .footer__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 20px 40px;
+    padding-top: 40px;
+    padding-bottom: 40px;
+  }
+
+  .footer__brand {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .footer__word {
+    font-family: var(--font-display);
+    font-size: 28px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .footer__chip {
+    display: inline-block;
+    padding: 2px 9px 0;
+    border: 2px solid var(--color-cream);
+    border-radius: 9px;
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+    box-shadow: 2px 2px 0 var(--color-cream);
+    font-family: var(--font-display);
+    font-size: 15px;
+    font-weight: 800;
+    transform: rotate(-4deg);
+  }
+
+  .footer__nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 24px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .footer__legal {
+    flex-basis: 100%;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    align-items: center;
+    gap: 4px 28px;
+    padding-top: 20px;
+    border-top: 1px dashed rgb(247 240 225 / 0.35);
+    font-size: 13px;
+    color: var(--color-on-navy-muted);
+  }
+
+  .footer__dev {
+    display: inline-flex;
+    font-weight: 700;
+  }
+</style>

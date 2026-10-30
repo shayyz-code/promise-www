@@ -1,0 +1,372 @@
+/*
+ * Promise Desk page-wide classes, imported once by `desk-page.astro`. Values are copied verbatim from the
+ * design artifact (`.pd-*` rules). Section-specific styles live in each section's scoped <style>.
+ */
+
+/* Dotted paper: the whole page sits on it (class on <body>). */
+.pd-dots {
+  background-color: var(--color-cream);
+  background-image: radial-gradient(rgb(30 49 82 / 0.14) 1.3px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+
+/* Font roles. Never put `lang` on the same element: the language-island rule would reset the family. */
+.pd-display {
+  font-family: var(--font-display);
+}
+
+.pd-mono {
+  font-family: var(--font-mono);
+}
+
+.pd-caps {
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.pd-wrap {
+  max-width: var(--page-max);
+  margin: 0 auto;
+  padding-left: var(--gutter);
+  padding-right: var(--gutter);
+}
+
+.pd-sec {
+  padding-top: clamp(64px, 9vw, 112px);
+  padding-bottom: clamp(64px, 9vw, 112px);
+}
+
+/* Type shared by several sections */
+.pd-h2 {
+  margin: 0;
+  font-size: clamp(44px, 5.4vw, 72px);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.015em;
+}
+
+.pd-body {
+  margin: 0;
+  max-width: 26em;
+  font-size: 18px;
+  line-height: 1.55;
+  color: var(--color-ink-desk);
+}
+
+.pd-copy {
+  margin: 0;
+  font-size: 16px;
+  line-height: 1.5;
+}
+
+/* Pills */
+.pd-pill {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  padding: 6px 12px;
+  border: 2px solid var(--color-navy);
+  border-radius: 999px;
+  font-size: 13px;
+  font-weight: 600;
+  line-height: 1.2;
+}
+
+.pd-pill-gold {
+  background: var(--color-desk-yellow);
+  color: var(--color-navy);
+}
+
+.pd-pill-navy {
+  background: var(--color-navy);
+  color: var(--color-cream);
+}
+
+/* Sticker buttons with a hard offset shadow that lifts on hover and presses flat on click */
+.pd-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  box-sizing: border-box;
+  min-height: 54px;
+  padding: 0 22px;
+  border: 2px solid var(--color-navy);
+  border-radius: 14px;
+  font-size: 17px;
+  font-weight: 700;
+  line-height: 1.2;
+  box-shadow: 4px 4px 0 var(--color-navy);
+  transition:
+    transform 0.15s ease,
+    box-shadow 0.15s ease;
+}
+
+.pd-btn:hover {
+  transform: translate(-2px, -2px);
+  box-shadow: 6px 6px 0 var(--color-navy);
+}
+
+.pd-btn:active {
+  transform: translate(4px, 4px);
+  box-shadow: 0 0 0 var(--color-navy);
+}
+
+.pd-btn-sm {
+  min-height: 44px;
+  padding: 0 16px;
+  border-radius: 12px;
+}
+
+.pd-btn-gold,
+.pd-btn-gold:hover {
+  background: var(--color-desk-yellow);
+  color: var(--color-navy);
+}
+
+.pd-btn-navy,
+.pd-btn-navy:hover {
+  background: var(--color-navy);
+  color: var(--color-cream);
+}
+
+.pd-btn-navy {
+  box-shadow: 4px 4px 0 var(--color-desk-yellow);
+}
+
+.pd-btn-navy:hover {
+  box-shadow: 6px 6px 0 var(--color-desk-yellow);
+}
+
+.pd-btn-navy:active {
+  box-shadow: 0 0 0 var(--color-desk-yellow);
+}
+
+.pd-btn-tg,
+.pd-btn-tg:hover {
+  background: var(--color-telegram);
+  color: var(--color-white);
+  font-size: 19px;
+}
+
+.pd-btn-dc,
+.pd-btn-dc:hover {
+  background: var(--color-discord);
+  color: var(--color-white);
+  font-size: 19px;
+}
+
+/* Underline that sweeps away on hover, and an arrow that nudges forward */
+.pd-link {
+  background: linear-gradient(currentColor, currentColor) left bottom / 100% 2px no-repeat;
+  transition: background-size 0.3s ease;
+}
+
+.pd-link:hover,
+a:hover .pd-link {
+  background-size: 0% 2px;
+}
+
+.pd-arrow {
+  flex-shrink: 0;
+  transition: transform 0.3s var(--ease-pop);
+}
+
+a:hover .pd-arrow {
+  transform: translateX(5px);
+}
+
+/* Navy surfaces: cream links, yellow focus ring */
+.pd-navy a,
+.pd-navy a:hover {
+  color: var(--color-cream);
+}
+
+.pd-navy a:focus-visible,
+.pd-navy button:focus-visible {
+  outline-color: var(--color-desk-yellow);
+}
+
+/* Load motion. `--d` (delay) and `--r` (rotation) come from modifier classes, never inline styles. */
+.pd-rise {
+  animation: pd-rise 0.7s var(--ease-soft) var(--d, 0s) backwards;
+}
+
+.pd-pop {
+  transform: rotate(var(--r, 0deg));
+  animation: pd-pop 0.55s var(--ease-pop) var(--d, 0s) backwards;
+}
+
+.pd-wiggle:hover {
+  animation: pd-wiggle 0.55s ease 1;
+}
+
+.pd-tilted {
+  transform: rotate(var(--r, 0deg));
+}
+
+.pd-d-0 {
+  --d: 0s;
+}
+
+.pd-d-06 {
+  --d: 0.06s;
+}
+
+.pd-d-08 {
+  --d: 0.08s;
+}
+
+.pd-d-10 {
+  --d: 0.1s;
+}
+
+.pd-d-12 {
+  --d: 0.12s;
+}
+
+.pd-d-16 {
+  --d: 0.16s;
+}
+
+.pd-d-18 {
+  --d: 0.18s;
+}
+
+.pd-d-24 {
+  --d: 0.24s;
+}
+
+.pd-d-30 {
+  --d: 0.3s;
+}
+
+.pd-d-32 {
+  --d: 0.32s;
+}
+
+.pd-d-40 {
+  --d: 0.4s;
+}
+
+.pd-d-42 {
+  --d: 0.42s;
+}
+
+.pd-d-54 {
+  --d: 0.54s;
+}
+
+.pd-d-70 {
+  --d: 0.7s;
+}
+
+/*
+ * Scroll reveal: `scripts/reveal.ts` adds `.is-revealed` to each `[data-reveal]` container. Items are
+ * hidden only when JS runs (`html.js`), on screen, and with motion allowed, so content stays visible
+ * without JS, under reduced motion and in print.
+ */
+.reveal {
+  --r: 0deg;
+}
+
+@media screen and (prefers-reduced-motion: no-preference) {
+  html.js [data-reveal]:not(.is-revealed) .reveal {
+    opacity: 0;
+  }
+
+  html.js [data-reveal].is-revealed .reveal {
+    animation: pd-in 0.7s var(--ease-soft) var(--d, 0s) both;
+  }
+}
+
+@keyframes pd-pop {
+  from {
+    opacity: 0;
+    transform: rotate(var(--r, 0deg)) scale(0.82);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--r, 0deg)) scale(1);
+  }
+}
+
+@keyframes pd-wiggle {
+  0%,
+  100% {
+    transform: rotate(0deg);
+  }
+  30% {
+    transform: rotate(-7deg);
+  }
+  65% {
+    transform: rotate(4deg);
+  }
+}
+
+@keyframes pd-rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes pd-in {
+  from {
+    opacity: 0;
+    transform: translateY(24px) scale(0.94) rotate(var(--r, 0deg));
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--r, 0deg));
+  }
+}
+
+/* Myanmar: Noto for the mono role too, roomier line-heights, no caps or tracking, smaller display type */
+html[lang="my"] .pd-mono {
+  font-family: var(--font-sans);
+}
+
+html[lang="my"] .pd-h2 {
+  font-size: clamp(37px, 4.6vw, 61px);
+  line-height: 1.4;
+  letter-spacing: normal;
+}
+
+html[lang="my"] p,
+html[lang="my"] .pd-body,
+html[lang="my"] .pd-copy,
+html[lang="my"] dd,
+html[lang="my"] li {
+  line-height: 1.7;
+}
+
+html[lang="my"] .pd-caps {
+  text-transform: none;
+  letter-spacing: normal;
+}
+
+html[lang="my"] .pd-pill {
+  font-size: 13.5px;
+  line-height: 1.6;
+  padding: 3px 12px;
+  letter-spacing: normal;
+}
+
+html[lang="my"] .pd-btn {
+  line-height: 1.5;
+  padding-top: 6px;
+  padding-bottom: 6px;
+}
+
+@media print {
+  .pd-rise,
+  .pd-pop,
+  .reveal {
+    animation: none;
+  }
+}

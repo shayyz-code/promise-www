@@ -1,0 +1,64 @@
+---
+import type { Business } from '@promise-www/content'
+import { format, localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import type { DeskLinks } from '../desk-links'
+import { latinLang } from '../lang'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  business: Business
+  links: DeskLinks
+}
+
+const { locale, t, business, links } = Astro.props
+const hours = format(t.stripHours, {
+  days: localize(business.hours.days, locale),
+  time: localize(business.hours.time, locale),
+})
+---
+
+<div class="strip pd-mono pd-navy">
+  <div class="pd-wrap strip__inner">
+    <a
+      class="strip__link"
+      href={links.home.href}
+      data-href-en={links.home.en}
+      data-href-my={links.home.my}
+    >
+      <span class="pd-link" lang={latinLang(locale)}>{business.name}</span>
+      <span>— {t.stripSub}</span>
+    </a>
+    <span class="strip__hours">{hours} · {t.stripCity}</span>
+  </div>
+</div>
+
+<style>
+  .strip {
+    background: var(--color-navy);
+    color: var(--color-cream);
+    font-size: 12.5px;
+  }
+
+  .strip__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 24px;
+  }
+
+  .strip__link {
+    display: inline-flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 6px;
+    min-height: 44px;
+  }
+
+  .strip__hours {
+    padding: 4px 0 10px;
+  }
+</style>

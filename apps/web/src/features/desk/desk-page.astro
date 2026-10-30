@@ -1,0 +1,81 @@
+---
+import SkipLink from '../../components/layout/skip-link.astro'
+import TabBar from '../../components/layout/tab-bar.astro'
+import type { TabItem } from '../../components/layout/tab-bar.types'
+import { getDictionary } from '../../i18n'
+import type { Locale } from '../../i18n/config'
+import BaseLayout from '../../layouts/base-layout.astro'
+import { getBusiness, getShelfItems } from '../../lib/content'
+import './desk.css'
+import { deskLinks } from './desk-links'
+import Community from './sections/community.astro'
+import DeskFooter from './sections/desk-footer.astro'
+import DeskHeader from './sections/desk-header.astro'
+import DeskHero from './sections/desk-hero.astro'
+import OrderSteps from './sections/order-steps.astro'
+import Shelf from './sections/shelf.astro'
+import VisitReceipt from './sections/visit-receipt.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'desk')
+const common = getDictionary(locale, 'common')
+const business = await getBusiness()
+const shelf = await getShelfItems()
+const links = deskLinks(business)
+
+const tabs: TabItem[] = [
+  { id: 'top', label: t.tabHome, href: '#top', icon: 'home', sections: ['top'], tone: 'yellow' },
+  {
+    id: 'shelf',
+    label: t.tabShelf,
+    href: '#shelf',
+    icon: 'bag',
+    sections: ['shelf'],
+    tone: 'cream',
+  },
+  { id: 'how', label: t.tabOrder, href: '#how', icon: 'list', sections: ['how'], tone: 'navy' },
+  {
+    id: 'community',
+    label: t.tabChat,
+    href: '#community',
+    icon: 'chat',
+    sections: ['community'],
+    tone: 'yellow',
+  },
+  {
+    id: 'visit',
+    label: t.tabVisit,
+    href: '#visit',
+    icon: 'pin',
+    sections: ['visit'],
+    tone: 'cream',
+  },
+]
+---
+
+<BaseLayout
+  section="desk"
+  locale={locale}
+  title={common.deskTitle}
+  description={common.deskDescription}
+  class="pd-dots"
+>
+  <SkipLink label={t.skip} variant="desk" />
+  <DeskHeader locale={locale} t={t} business={business} links={links} />
+  <main id="main">
+    <DeskHero locale={locale} t={t} links={links} shelf={shelf} />
+    <Shelf locale={locale} t={t} links={links} shelf={shelf} />
+    <OrderSteps locale={locale} t={t} links={links} />
+    <Community locale={locale} t={t} links={links} />
+    <VisitReceipt locale={locale} t={t} business={business} links={links} />
+  </main>
+  <DeskFooter locale={locale} t={t} business={business} links={links} />
+  <TabBar variant="desk" label={t.tabsNav} items={tabs} bottomTab="visit" />
+  <script>
+    import './scripts/reveal'
+  </script>
+</BaseLayout>

@@ -1,0 +1,166 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import type { DeskLinks } from '../desk-links'
+import { latinLang } from '../lang'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  links: DeskLinks
+}
+
+const { locale, t, links } = Astro.props
+const lang = latinLang(locale)
+---
+
+<section id="how" aria-labelledby="how-title" class="how">
+  <div class="pd-wrap pd-sec how__inner" data-reveal>
+    <div class="how__intro">
+      <span class="pd-pill pd-pill-navy pd-mono pd-caps reveal">{t.howTag}</span>
+      <h2 id="how-title" class="pd-h2 pd-display reveal pd-d-06">{t.howTitle}</h2>
+      <p class="pd-body reveal pd-d-12">{t.howIntro}</p>
+      <div class="how__cta reveal pd-d-18">
+        <a class="pd-btn pd-btn-tg" href={links.bot.href}>
+          <Icon name="send" size={20} />
+          {t.howCta}
+        </a>
+      </div>
+    </div>
+    <div class="steps-card pd-navy reveal pd-d-12">
+      <ol class="steps" role="list">
+        <li class="step">
+          <span class="step__num pd-display" aria-hidden="true">1</span>
+          <div class="step__text">
+            <h3 class="step__title pd-display">{t.s1Title}</h3>
+            <p class="pd-copy step__body">{t.s1a}<a class="pd-link" href={links.bot.href} lang={lang}>{links.bot.handle}</a>{t.s1b}<a class="pd-link" href={links.discord.href} lang={lang}>Discord</a>{t.s1c}<a class="pd-link" href={links.viber}>{links.primary.number}</a>{t.s1d}</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num pd-display" aria-hidden="true">2</span>
+          <div class="step__text">
+            <h3 class="step__title pd-display">{t.s2Title}</h3>
+            <p class="pd-copy step__body">{t.s2Body}</p>
+          </div>
+        </li>
+        <li class="step">
+          <span class="step__num pd-display" aria-hidden="true">3</span>
+          <div class="step__text">
+            <h3 class="step__title pd-display">{t.s3Title}</h3>
+            <p class="pd-copy step__body">{t.s3Body}</p>
+          </div>
+        </li>
+      </ol>
+    </div>
+  </div>
+</section>
+
+<style>
+  .how {
+    border-top: 2px solid var(--color-navy);
+  }
+
+  .how__inner {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-start;
+    gap: 40px 56px;
+  }
+
+  .how__intro {
+    flex: 1 1 320px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+
+  .how__cta {
+    margin-top: 10px;
+  }
+
+  .steps-card {
+    flex: 2 1 520px;
+    min-width: 0;
+    box-sizing: border-box;
+    overflow: hidden;
+    border: 2px solid var(--color-navy);
+    border-radius: 18px;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 6px 6px 0 var(--color-desk-yellow);
+  }
+
+  .steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+  }
+
+  .step {
+    display: flex;
+    align-items: flex-start;
+    gap: 20px;
+    padding: 24px 26px;
+  }
+
+  .step + .step {
+    border-top: 2px dashed rgb(247 240 225 / 0.4);
+  }
+
+  .step__num {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    box-sizing: border-box;
+    width: 48px;
+    height: 48px;
+    padding-top: 3px;
+    border: 2px solid var(--color-desk-yellow);
+    border-radius: 50%;
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .step__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    min-width: 0;
+  }
+
+  .step__title {
+    margin: 0;
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 1.1;
+  }
+
+  /* Myanmar keeps its 1.7 line-height from desk.css (`html[lang='my'] .pd-copy`). */
+  .step__body {
+    color: var(--color-on-navy);
+    line-height: 1.55;
+  }
+
+  .steps a,
+  .steps a:hover {
+    color: var(--color-desk-yellow);
+    font-weight: 700;
+  }
+
+  :global(html[lang='my']) .step__title {
+    font-size: 22px;
+    line-height: 1.45;
+  }
+
+  @media (max-width: 767px) {
+    .step {
+      padding: 22px 18px;
+    }
+  }
+</style>

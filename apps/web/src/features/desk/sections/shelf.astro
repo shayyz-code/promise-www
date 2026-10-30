@@ -1,0 +1,64 @@
+---
+import type { ShelfItem } from '@promise-www/content'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import SectionHead from '../components/section-head.astro'
+import type { DeskLinks } from '../desk-links'
+import ShelfCard from './shelf-card.astro'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  links: DeskLinks
+  shelf: ShelfItem[]
+}
+
+const { locale, t, links, shelf } = Astro.props
+const tones = ['navy', 'gold', 'cream'] as const
+const delays = ['pd-d-0', 'pd-d-08', 'pd-d-16', 'pd-d-24', 'pd-d-32', 'pd-d-40'] as const
+---
+
+<section id="shelf" aria-labelledby="shelf-title" class="shelf">
+  <div class="pd-wrap pd-sec shelf__inner" data-reveal>
+    <SectionHead
+      titleId="shelf-title"
+      tag={t.shelfTag}
+      title={t.shelfTitle}
+      intro={t.shelfIntro}
+    />
+    <div class="shelf__grid">
+      {
+        shelf.map((item, index) => (
+          <ShelfCard
+            item={item}
+            locale={locale}
+            num={`${t.num} ${String(index + 1).padStart(2, '0')}`}
+            tone={tones[index % tones.length] ?? 'navy'}
+            delay={delays[index % delays.length] ?? 'pd-d-0'}
+            photoLabel={t.photo}
+            askHref={links.bot.href}
+          />
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .shelf {
+    border-top: 2px solid var(--color-navy);
+    background: var(--color-card);
+  }
+
+  .shelf__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 48px;
+  }
+
+  .shelf__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 28px;
+  }
+</style>
