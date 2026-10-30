@@ -1,0 +1,45 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "env": {
+    "BASH_DEFAULT_TIMEOUT_MS": "300000"
+  },
+  "permissions": {
+    "ask": ["Edit(**/i18n/dictionaries/my/**)", "Edit(**/packages/content/src/data/**)"],
+    "deny": [
+      "Bash(bun run deploy)",
+      "Bash(bun run deploy *)",
+      "Bash(bun run --filter * deploy)",
+      "Bash(bun run --filter * deploy *)",
+      "Bash(*wrangler deploy*)",
+      "Bash(*wrangler secret*)",
+      "Bash(*wrangler login*)",
+      "Bash(gh api *pending_deployments*)",
+      "Bash(gh api *environments*)",
+      "Bash(gh secret *)",
+      "Bash(gh variable *)",
+      "Bash(git push * main)",
+      "Bash(git push * main *)",
+      "Bash(git push * HEAD:main*)",
+      "Bash(git push *--no-verify*)",
+      "Bash(git commit *--no-verify*)",
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.production)",
+      "Read(**/.dev.vars*)",
+      "Read(~/Library/Preferences/.wrangler/**)"
+    ]
+  },
+  "hooks": {
+    "SessionStart": [
+      {
+        "matcher": "startup",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "[ -d node_modules ] || bun install --frozen-lockfile >/dev/null"
+          }
+        ]
+      }
+    ]
+  }
+}
