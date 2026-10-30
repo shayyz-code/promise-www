@@ -109,7 +109,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: production
-      url: ${{ steps.deploy.outputs.deployment-url }}
+      url: ${{ vars.SITE_URL }}
     concurrency:
       group: production
       cancel-in-progress: false
@@ -133,8 +133,9 @@ jobs:
           fi
       - name: Build with production settings
         run: bun run build
+      - name: Audit the build for indexing
+        run: bun run check:seo-build
       - name: Deploy Worker static assets
-        id: deploy
         uses: cloudflare/wrangler-action@v4
         with:
           apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
@@ -147,5 +148,5 @@ jobs:
         run: bunx playwright install --with-deps chromium webkit
       - name: Smoke-test the deployment
         env:
-          PLAYWRIGHT_BASE_URL: ${{ steps.deploy.outputs.deployment-url }}
+          PLAYWRIGHT_BASE_URL: ${{ vars.SITE_URL }}
         run: bun run test:e2e:deployed
