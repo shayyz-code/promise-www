@@ -12,7 +12,7 @@
     "test:e2e:fast": "playwright test --project=desktop-chromium --project=mobile-chromium",
     "test:e2e:deployed": "playwright test --config playwright.deployed.config.ts",
     "lhci": "lhci autorun",
-    "og:generate": "node scripts/generate-og.ts",
+    "og:generate": "bun scripts/generate-og.ts",
     "deploy": "node scripts/check-deploy-env.ts && astro build && wrangler deploy",
     "deploy:dry-run": "wrangler deploy --dry-run"
   },
