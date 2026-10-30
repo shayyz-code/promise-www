@@ -88,7 +88,7 @@ test.describe('SEO @once', () => {
       expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630])
     })
 
-    test(`${sitePage.name}: Store structured data`, async ({ page }) => {
+    test(`${sitePage.name}: structured data`, async ({ page }) => {
       await page.goto(sitePage.path)
       const blocks = await page
         .locator('script[type="application/ld+json"]')
@@ -99,7 +99,9 @@ test.describe('SEO @once', () => {
         const data: unknown = JSON.parse(block)
         return typeof data === 'object' && data !== null && '@type' in data ? data['@type'] : null
       })
-      expect(types).toContain('Store')
+      expect(types).toContain('OfficeEquipmentStore')
+      // Google reads the site name from the home page only.
+      expect(types.includes('WebSite')).toBe(sitePage.section === 'home')
     })
   }
 
