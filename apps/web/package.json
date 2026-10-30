@@ -1,0 +1,27 @@
+{
+  "name": "@promise-www/web",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "astro dev",
+    "build": "astro build",
+    "preview": "wrangler dev --port 8787",
+    "typecheck": "astro check",
+    "test": "bun test",
+    "test:e2e": "playwright test",
+    "test:e2e:deployed": "playwright test --config playwright.deployed.config.ts",
+    "lhci": "lhci autorun",
+    "og:generate": "node scripts/generate-og.ts",
+    "deploy": "wrangler deploy",
+    "deploy:dry-run": "wrangler deploy --dry-run"
+  },
+  "dependencies": {
+    "astro": "7.4.4"
+  },
+  "devDependencies": {
+    "@astrojs/check": "0.9.12",
+    "@types/bun": "1.4.4",
+    "typescript": "6.0.3",
+    "wrangler": "4.156.0"
+  }
+}
