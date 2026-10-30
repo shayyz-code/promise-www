@@ -63,6 +63,10 @@ test.describe('SEO @once', () => {
         'content',
         absolute(`/og/${sitePage.section}-${sitePage.locale}.png`),
       )
+      await expect(page.locator('meta[property="og:image:alt"]')).toHaveAttribute(
+        'content',
+        sitePage.h1.join(' '),
+      )
       await expect(page.locator('meta[property="og:locale"]')).toHaveAttribute(
         'content',
         ogLocale[sitePage.locale],
@@ -72,6 +76,16 @@ test.describe('SEO @once', () => {
         ogLocale[otherLocale(sitePage.locale)],
       )
       await expect(page.locator('meta[property="og:title"]')).toHaveAttribute('content', /\S/)
+    })
+
+    test(`${sitePage.name}: the share image is a 1200×630 PNG`, async ({ request }) => {
+      const response = await request.get(`/og/${sitePage.section}-${sitePage.locale}.png`)
+      expect(response.status()).toBe(200)
+      expect(response.headers()['content-type']).toContain('image/png')
+
+      // A PNG stores its width and height as big-endian integers at bytes 16 and 20.
+      const png = await response.body()
+      expect([png.readUInt32BE(16), png.readUInt32BE(20)]).toEqual([1200, 630])
     })
 
     test(`${sitePage.name}: Store structured data`, async ({ page }) => {
