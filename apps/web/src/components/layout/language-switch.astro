@@ -63,7 +63,7 @@ const options = (['en', 'my'] as const).map((option) => ({
     cursor: default;
   }
 
-  /* English pages show "မြန်မာ" in the system Myanmar font rather than downloading the webfont. */
+  /* English pages show the Myanmar label in the system font rather than downloading the webfont. */
   :global(html[lang='en']) .lang-switch a[lang='my'] {
     font-family: system-ui, sans-serif;
   }
