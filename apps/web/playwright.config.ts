@@ -1,3 +1,4 @@
+import { createHash } from 'node:crypto'
 import { defineConfig, devices, type PlaywrightTestConfig, type Project } from '@playwright/test'
 
 /*
@@ -18,7 +19,16 @@ const runVisual = process.env.VISUAL === '1'
 const ONCE = /@once/
 const VISUAL = /@visual/
 
-export const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? 'http://localhost:8787'
+// Each checkout gets its own port, so parallel worktrees never test each other's build. It is derived from the
+// config path rather than picked at run time because the build bakes SITE_URL in and workers re-read this file.
+const pathHash = createHash('sha256')
+  .update(import.meta.url)
+  .digest()
+  .readUInt16BE(0)
+const port = Number(process.env.E2E_PORT ?? 20_000 + (pathHash % 10_000))
+const localURL = `http://localhost:${port}`
+
+export const baseURL = process.env.PLAYWRIGHT_BASE_URL ?? localURL
 
 export const projects = [
   {
@@ -51,7 +61,7 @@ export const sharedConfig = {
   retries: isCI ? 2 : 0,
   reporter: isCI
     ? [['github'], ['html', { open: 'never' }]]
-    : [['list'], ['html', { open: 'never' }]],
+    : [[process.stdout.isTTY ? 'list' : 'dot'], ['html', { open: 'never' }]],
   use: {
     baseURL,
     trace: 'on-first-retry',
@@ -62,12 +72,13 @@ export const sharedConfig = {
 export default defineConfig({
   ...sharedConfig,
   webServer: {
-    command: 'bun run build && bunx wrangler dev --port 8787 --ip 127.0.0.1',
-    url: 'http://localhost:8787/',
-    reuseExistingServer: !isCI,
+    command: `bun run build && bunx wrangler dev --port ${port} --ip 127.0.0.1`,
+    url: `${localURL}/`,
+    // Never reuse a server: it would skip the build, and the tests would pass against stale output.
+    reuseExistingServer: false,
     timeout: 180_000,
     env: {
-      SITE_URL: 'http://localhost:8787',
+      SITE_URL: localURL,
       SITE_INDEXABLE: 'false',
       WRANGLER_SEND_METRICS: 'false',
     },

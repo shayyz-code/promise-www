@@ -20,6 +20,7 @@
     "typecheck": "bun run --filter '*' typecheck",
     "test": "bun run --filter '*' test",
     "test:e2e": "bun run --filter @promise-www/web test:e2e",
+    "test:e2e:fast": "bun run --filter @promise-www/web test:e2e:fast",
     "test:e2e:deployed": "bun run --filter @promise-www/web test:e2e:deployed",
     "lhci": "bun run --filter @promise-www/web lhci",
     "og:generate": "bun run --filter @promise-www/web og:generate",
