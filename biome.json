@@ -6,7 +6,7 @@
     "useIgnoreFile": true
   },
   "files": {
-    "includes": ["**", "!!**/dist", "!!**/.astro", "!!**/public"]
+    "includes": ["**", "!!**/dist", "!!**/.astro", "!!**/public", "!.agents"]
   },
   "formatter": {
     "enabled": true,
