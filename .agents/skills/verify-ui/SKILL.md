@@ -21,15 +21,19 @@ Work in the current checkout. Report what you find and do not fix it: the caller
 
    Do not use `bun run preview`: its fixed port may be serving another worktree's build.
 
-3. Read only the PNGs for the affected pages from `apps/web/e2e/visual.spec.ts-snapshots/`. They are named
-   `<section>-<locale>-<width>-desktop-chromium-<platform>.png`, for example `home-my-390-desktop-chromium-darwin.png`.
-   Each one is large, so skip pages the change cannot reach. The folder is gitignored; never commit it.
+3. Read the slices for the affected pages from `apps/web/test-results/slices/`. They are named
+   `<section>-<locale>-<width>-<part>.png`, top of the page first, for example `home-my-390-1.png`. Skip pages the
+   change cannot reach. Do not read the full-page PNGs in `e2e/visual.spec.ts-snapshots/`: a phone page is about
+   12,000 px tall, and image readers shrink it until nothing is legible. Both folders are gitignored.
 
 4. Compare them with `DESIGN.md`, and with the design artifact if you can read it (`AGENTS.md` explains how):
    - layout at both widths: nothing overflows, clips or overlaps;
    - Myanmar pages: taller line height, smaller display sizes, no text cut off by a fixed height;
    - English words inside Myanmar copy render in the Latin font;
    - tokens, tab bar below 768 px, and interactive targets of at least 44 px.
+
+   The mobile tab bar is fixed, so at 390 px it appears once, over the content near the bottom of the first viewport
+   (about 800 px down the first slice). That comes from the full-page capture and is not an overlap bug.
 
 5. Report each problem with its page, language and width, what you expected, and the file to change if you can tell.
    If there are none, say so and list what you checked. Do not paste image content into the report.
