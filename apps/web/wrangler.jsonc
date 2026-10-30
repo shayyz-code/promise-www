@@ -1,0 +1,13 @@
+{
+  "$schema": "./node_modules/wrangler/config-schema.json",
+  // Assets-only Worker: serves the static Astro build from Cloudflare's edge (no Worker code runs).
+  "name": "promise-www",
+  "compatibility_date": "2026-10-23",
+  "workers_dev": true,
+  "preview_urls": false,
+  "assets": {
+    "directory": "./dist",
+    "html_handling": "auto-trailing-slash",
+    "not_found_handling": "404-page"
+  }
+}
