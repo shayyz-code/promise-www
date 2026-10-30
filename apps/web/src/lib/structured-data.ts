@@ -33,6 +33,11 @@ export const storeJsonLd = (business: Business, siteUrl: string) => {
       postalCode: business.address.postalCode,
       addressCountry: business.address.countryCode,
     },
+    geo: {
+      '@type': 'GeoCoordinates',
+      latitude: business.geo.latitude,
+      longitude: business.geo.longitude,
+    },
     hasMap: business.mapUrl,
     openingHoursSpecification: business.hours.schedule.map((slot) => ({
       '@type': 'OpeningHoursSpecification',

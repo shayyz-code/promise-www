@@ -23,6 +23,7 @@ export const business = {
   },
   discordInvite: 'NhfFd8ZX8',
   mapUrl: 'https://maps.app.goo.gl/PSKScHszoEyGHuUP8',
+  geo: { latitude: 20.1409046, longitude: 94.9478098 },
   hours: {
     days: { en: 'Monday to Friday', my: 'တနင်္လာ မှ သောကြာ' },
     time: { en: '8:00 AM – 5:00 PM', my: 'နံနက် 8:00 – ညနေ 5:00' },
