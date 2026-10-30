@@ -23,7 +23,18 @@
       "test": "recommended"
     },
     "rules": {
-      "preset": "recommended"
+      "preset": "recommended",
+      "style": {
+        "useFilenamingConvention": {
+          "level": "error",
+          "options": {
+            "filenameCases": ["kebab-case"]
+          }
+        }
+      },
+      "suspicious": {
+        "noExplicitAny": "error"
+      }
     }
   },
   "assist": {
