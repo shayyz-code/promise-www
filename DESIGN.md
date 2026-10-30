@@ -1,9 +1,9 @@
 # Design system
 
 The website implements the design artifact
-[Promise Paper & Stationery Website](https://claude.ai/artifact/MYn7brXigESbFbTwSJeTEY). It has four boards: Home
-(1440 px), Promise Desk (1440 px), and both pages on a phone (390 px). Treat the artifact as the source of truth for
-copy, layout, sizes and motion. This document records the decisions you need to implement it consistently.
+[Promise Paper & Stationery Website](https://claude.ai/artifact/MYn7brXigESbFbTwSJeTEY). It has Home (1440 px), Promise
+Desk (1440 px), both pages on a phone (390 px), and four share images (1200 × 630). Treat the artifact as the source of
+truth for copy, layout, sizes and motion. This document records the decisions you need to implement it consistently.
 
 ## Principles
 
@@ -99,6 +99,15 @@ All are `max-width` queries, copied from the artifact:
 | `layout/seo-head.astro`        | —                                    | Title, description, canonical, hreflang, OG, robots.                                                |
 
 Page-specific building blocks (buttons, rows, cards, polaroids, receipt) live in `src/features/<page>/`.
+
+## Share images
+
+`apps/web/public/og/<section>-<locale>.png` are committed files, referenced by `seo-head.astro`. `bun run og:generate`
+renders them with `scripts/generate-og.ts`, which follows the artifact's `Og*` boards: `OgHomeEn` is `home-en.png`, and
+so on. Copy comes from the dictionaries and the shelf, so run it after changing a hero headline, the slogan, the Desk
+hero cards or the domain. The headline is also the image's `og:image:alt`.
+
+The Myanmar Desk headline breaks after `၊`, and the Home underline sits lower in Myanmar to clear the descenders.
 
 ## CSP rules
 
