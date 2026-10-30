@@ -33,7 +33,7 @@ bun run dev                              # http://localhost:4321
 | `bun run check`    | Biome, type checks and unit tests                                 |
 | `bun run test:e2e` | Playwright end-to-end suite (installs: `bunx playwright install`) |
 | `bun run lhci`     | Lighthouse CI performance budgets                                 |
-| `bun run deploy`   | Deploy to Cloudflare (`bunx wrangler login` first)                |
+| `bun run deploy`   | Build and deploy to Cloudflare (needs `SITE_URL`, see below)      |
 
 ## Structure
 
@@ -56,6 +56,10 @@ See [`apps/web/.env.example`](apps/web/.env.example).
 | ---------------- | ----------------------- | --------------------------------------------------------------------------------------- |
 | `SITE_URL`       | `http://localhost:8787` | Public origin for canonical URLs, hreflang, the sitemap and share images                |
 | `SITE_INDEXABLE` | `false`                 | Allow search engines to index the site. Set it to `true` only on the production domain. |
+
+To deploy from your machine, run `bunx wrangler login` once, then
+`SITE_URL=https://promise-www.<account>.workers.dev bun run deploy`. The script refuses a missing or
+localhost `SITE_URL`, because the build bakes it into canonical and share-image URLs.
 
 CI deploys need the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets, plus `SITE_URL` and
 `SITE_INDEXABLE` variables, in the GitHub `production` environment.
