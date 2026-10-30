@@ -12,7 +12,7 @@
     "test:e2e:deployed": "playwright test --config playwright.deployed.config.ts",
     "lhci": "lhci autorun",
     "og:generate": "node scripts/generate-og.ts",
-    "deploy": "wrangler deploy",
+    "deploy": "node scripts/check-deploy-env.ts && astro build && wrangler deploy",
     "deploy:dry-run": "wrangler deploy --dry-run"
   },
   "dependencies": {
