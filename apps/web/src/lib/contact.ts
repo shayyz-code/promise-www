@@ -1,6 +1,6 @@
 /** Builders for the contact links used across the site. Pure functions of the business data. */
 
-/** `09965072801` → `+959965072801` */
+/** `09XXXXXXXXX` → `+959XXXXXXXXX` */
 export const toInternational = (localNumber: string): string =>
   `+95${localNumber.replace(/^0/, '')}`
 
