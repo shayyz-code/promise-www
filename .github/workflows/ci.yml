@@ -9,9 +9,11 @@ on:
 permissions:
   contents: read
 
+# Only pull requests share a group. A deploy waiting for approval keeps its run open, so a shared group on main
+# would hold back the CI of every later push.
 concurrency:
-  group: ci-${{ github.ref }}
-  cancel-in-progress: ${{ github.ref != 'refs/heads/main' }}
+  group: ci-${{ github.event_name == 'pull_request' && github.ref || github.run_id }}
+  cancel-in-progress: ${{ github.event_name == 'pull_request' }}
 
 env:
   CI: "true"
