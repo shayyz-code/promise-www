@@ -6,16 +6,23 @@
 interface Props {
   /** default: navy and gold on cream · inverse: cream and gold on deep navy · mono: white on black */
   tone?: 'default' | 'inverse' | 'mono'
+  /** Background the default tone sits on: the crossing is masked with this colour. */
+  surface?: 'cream' | 'card'
   /** Animate the strokes drawing in on load (home hero seam). */
   draw?: boolean
   class?: string
 }
 
-const { tone = 'default', draw = false, class: className } = Astro.props
+const { tone = 'default', surface = 'cream', draw = false, class: className } = Astro.props
 ---
 
 <svg
-  class:list={['logo-mark', `logo-mark--${tone}`, { 'logo-mark--draw': draw }, className]}
+  class:list={[
+    'logo-mark',
+    `logo-mark--${tone}`,
+    { 'logo-mark--on-card': surface === 'card', 'logo-mark--draw': draw },
+    className,
+  ]}
   viewBox="46 -16 152 208"
   aria-hidden="true"
 >
@@ -45,6 +52,10 @@ const { tone = 'default', draw = false, class: className } = Astro.props
     --logo-primary: var(--color-navy);
     --logo-accent: var(--color-gold);
     --logo-cut: var(--color-cream);
+  }
+
+  .logo-mark--default.logo-mark--on-card {
+    --logo-cut: var(--color-card);
   }
 
   .logo-mark--inverse {
