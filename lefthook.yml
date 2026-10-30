@@ -10,3 +10,18 @@ pre-commit:
       glob: "*.{js,mjs,cjs,ts,json,jsonc,astro,css}"
       run: bunx biome check --write --no-errors-on-unmatched --files-ignore-unknown=true {staged_files}
       stage_fixed: true
+    unit:
+      run: bun run test
+
+pre-push:
+  commands:
+    # Changes reach main through pull requests. `gh pr merge` happens on GitHub and does not run this hook.
+    refuse-main:
+      use_stdin: true
+      run: |
+        if grep -q ' refs/heads/main '; then
+          echo 'Do not push to main. Open a pull request.' >&2
+          exit 1
+        fi
+    check:
+      run: bun run check

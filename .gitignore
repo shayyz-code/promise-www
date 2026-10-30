@@ -11,6 +11,12 @@ test-results/
 playwright-report/
 blob-report/
 .lighthouseci/
+# Local before/after comparison only: CI does not run them, and PNGs differ per platform.
+apps/web/e2e/*-snapshots/
+
+# Personal Claude Code state
+.claude/settings.local.json
+.claude/worktrees/
 
 # Env (only the example is committed)
 .env
