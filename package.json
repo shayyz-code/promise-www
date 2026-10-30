@@ -24,6 +24,7 @@
     "test:e2e:deployed": "bun run --filter @promise-www/web test:e2e:deployed",
     "lhci": "bun run --filter @promise-www/web lhci",
     "og:generate": "bun run --filter @promise-www/web og:generate",
+    "check:seo-build": "bun run --filter @promise-www/web check:seo-build",
     "deploy": "bun run --filter @promise-www/web deploy",
     "deploy:dry-run": "bun run --filter @promise-www/web deploy:dry-run",
     "lint": "biome lint .",
