@@ -16,6 +16,7 @@
     "deploy:dry-run": "wrangler deploy --dry-run"
   },
   "dependencies": {
+    "@promise-www/content": "workspace:*",
     "astro": "7.4.4"
   },
   "devDependencies": {

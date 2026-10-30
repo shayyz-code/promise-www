@@ -15,6 +15,7 @@
     "apps/web": {
       "name": "@promise-www/web",
       "dependencies": {
+        "@promise-www/content": "workspace:*",
         "astro": "7.4.4",
       },
       "devDependencies": {
