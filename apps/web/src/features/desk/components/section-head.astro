@@ -1,0 +1,37 @@
+---
+/** Section heading row: tag pill and title on the left, intro on the right (wraps below on phones). */
+interface Props {
+  /** id of the <h2>, for the section's aria-labelledby. */
+  titleId: string
+  tag: string
+  title: string
+  intro: string
+}
+
+const { titleId, tag, title, intro } = Astro.props
+---
+
+<div class="section-head">
+  <div class="section-head__title">
+    <span class="pd-pill pd-pill-navy pd-mono pd-caps reveal">{tag}</span>
+    <h2 id={titleId} class="pd-h2 pd-display reveal pd-d-06">{title}</h2>
+  </div>
+  <p class="pd-body reveal pd-d-12">{intro}</p>
+</div>
+
+<style>
+  .section-head {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 40px;
+  }
+
+  .section-head__title {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 14px;
+  }
+</style>

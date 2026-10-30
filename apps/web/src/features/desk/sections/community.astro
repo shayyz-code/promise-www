@@ -1,0 +1,201 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import SectionHead from '../components/section-head.astro'
+import type { DeskLinks } from '../desk-links'
+import { latinLang } from '../lang'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  links: DeskLinks
+}
+
+const { locale, t, links } = Astro.props
+const lang = latinLang(locale)
+const telegramRows = [
+  { href: links.bot.href, handle: links.bot.handle, note: t.tgBotNote },
+  { href: links.shop.href, handle: links.shop.handle, note: t.tgShopNote },
+]
+---
+
+<section id="community" aria-labelledby="community-title" class="community">
+  <div class="pd-wrap pd-sec community__inner" data-reveal>
+    <SectionHead
+      titleId="community-title"
+      tag={t.commTag}
+      title={t.commTitle}
+      intro={t.commIntro}
+    />
+    <div class="chats">
+      <div class="chat chat--tg reveal pd-d-0">
+        <div class="chat__head">
+          <span class="chat__chip"><Icon name="send" size={26} /></span>
+          <h3 class="chat__title pd-display"><span lang={lang}>Telegram</span></h3>
+        </div>
+        {
+          telegramRows.map((row) => (
+            <a class="chat__row" href={row.href}>
+              <span class="chat__label">
+                <span class="chat__handle" lang={lang}>{row.handle}</span>
+                <span class="chat__note pd-pill pd-pill-gold pd-mono pd-caps">{row.note}</span>
+              </span>
+              <Icon name="arrow-right" size={24} strokeWidth={2.2} class="pd-arrow" />
+            </a>
+          ))
+        }
+      </div>
+      <div class="chat chat--dc reveal pd-d-10">
+        <div class="chat__head">
+          <span class="chat__chip"><Icon name="users" size={26} /></span>
+          <h3 class="chat__title pd-display"><span lang={lang}>Discord</span></h3>
+        </div>
+        <a class="chat__row" href={links.discord.href}>
+          <span class="chat__label chat__label--stack">
+            <span class="chat__handle">{t.dcJoin}</span>
+            <span class="chat__url pd-mono">{links.discord.label}</span>
+          </span>
+          <Icon name="arrow-right" size={24} strokeWidth={2.2} class="pd-arrow" />
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .community {
+    border-top: 2px solid var(--color-navy);
+    background: var(--color-card);
+  }
+
+  .community__inner {
+    display: flex;
+    flex-direction: column;
+    gap: 44px;
+  }
+
+  .chats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px;
+  }
+
+  .chat {
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+    padding: 26px 28px 12px;
+    border: 2px solid var(--color-navy);
+    border-radius: 20px;
+    color: var(--color-white);
+    box-shadow: 6px 6px 0 var(--color-navy);
+  }
+
+  .chat--tg {
+    flex: 3 1 420px;
+    background: var(--color-telegram);
+  }
+
+  .chat--dc {
+    flex: 2 1 320px;
+    justify-content: space-between;
+    background: var(--color-discord);
+  }
+
+  .chat__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .chat__chip {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 52px;
+    height: 52px;
+    border: 2px solid var(--color-navy);
+    border-radius: 50%;
+    background: var(--color-white);
+  }
+
+  .chat--tg .chat__chip {
+    color: var(--color-telegram);
+  }
+
+  .chat--dc .chat__chip {
+    color: var(--color-discord);
+  }
+
+  .chat__title {
+    margin: 0;
+    font-size: 34px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .chat__row,
+  .chat__row:hover {
+    color: var(--color-white);
+  }
+
+  .chat__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 16px;
+    min-height: 60px;
+    padding: 10px 0;
+    border-top: 2px dashed rgb(255 255 255 / 0.5);
+  }
+
+  .chat__label {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 6px 12px;
+    min-width: 0;
+  }
+
+  .chat__label--stack {
+    flex-direction: column;
+    flex-wrap: nowrap;
+    align-items: stretch;
+    gap: 4px;
+  }
+
+  .chat__handle {
+    font-size: 22px;
+    font-weight: 700;
+    line-height: 1.2;
+    overflow-wrap: anywhere;
+  }
+
+  /* The note pills keep their small size in Myanmar too (only the line-height grows). */
+  .chat__note,
+  :global(html[lang='my']) .chat__note {
+    align-self: center;
+    padding: 3px 10px;
+    font-size: 12px;
+  }
+
+  .chat__url {
+    font-size: 13px;
+    overflow-wrap: anywhere;
+  }
+
+  :global(html[lang='my']) .chat__title {
+    font-size: 29px;
+    line-height: 1.4;
+  }
+
+  :global(html[lang='my']) .chat__handle {
+    line-height: 1.5;
+    letter-spacing: normal;
+  }
+</style>

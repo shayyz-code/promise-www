@@ -1,0 +1,172 @@
+---
+import type { ShelfItem } from '@promise-www/content'
+import Icon from '../../../components/ui/icon.astro'
+import { localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+
+interface Props {
+  item: ShelfItem
+  locale: Locale
+  /** "No. 01" */
+  num: string
+  /** Card colour, cycling navy, gold, cream. */
+  tone: 'navy' | 'gold' | 'cream'
+  /** Reveal delay modifier class, e.g. `pd-d-08`. */
+  delay: string
+  /** Placeholder shown until the item has a photo. */
+  photoLabel: string
+  askHref: string
+}
+
+const { item, locale, num, tone, delay, photoLabel, askHref } = Astro.props
+const image = item.image
+---
+
+<article class:list={['card', `card--${tone}`, { 'pd-navy': tone === 'navy' }, 'reveal', delay]}>
+  <div class="card__top">
+    <span class="card__num pd-mono">{num}</span>
+    <span class:list={['card__tag', `accent--${item.accent}`]}>
+      <Icon name={item.icon} size={24} strokeWidth={1.8} />
+    </span>
+  </div>
+  <div class:list={['card__photo', `accent--${item.accent}`]}>
+    {
+      image ? (
+        <img src={image.src} alt={localize(image.alt, locale)} loading="lazy" decoding="async" />
+      ) : (
+        photoLabel
+      )
+    }
+  </div>
+  <div class="card__text">
+    <h3 class="card__name pd-display">{localize(item.name, locale)}</h3>
+    <p class="pd-copy">{localize(item.description, locale)}</p>
+  </div>
+  <a class="card__ask" href={askHref}>
+    <span class="pd-link">{localize(item.ask, locale)}</span>
+    <Icon name="arrow-right" size={18} strokeWidth={2.2} class="pd-arrow" />
+  </a>
+</article>
+
+<style>
+  .card {
+    display: flex;
+    flex-direction: column;
+    gap: 16px;
+    padding: 20px;
+    border: 2px solid var(--color-navy);
+    border-radius: 18px;
+    box-shadow: 5px 5px 0 var(--color-navy);
+  }
+
+  .card--navy {
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 5px 5px 0 var(--color-desk-yellow);
+  }
+
+  .card--gold {
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+  }
+
+  .card--cream {
+    background: var(--color-card);
+    color: var(--color-navy);
+  }
+
+  .card__top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  .card__num {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .card__tag {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 44px;
+    height: 44px;
+    border: 2px solid var(--color-navy);
+    border-radius: 50%;
+    color: var(--color-navy);
+  }
+
+  .card__photo {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    aspect-ratio: 4 / 3;
+    overflow: hidden;
+    border: 2px solid var(--color-navy);
+    border-radius: 12px;
+    font-size: 13px;
+    color: var(--color-ink-desk);
+  }
+
+  .card__photo img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .accent--pink {
+    background: var(--color-pink);
+  }
+
+  .accent--blue {
+    background: var(--color-blue);
+  }
+
+  .accent--yellow {
+    background: var(--color-yellow);
+  }
+
+  .accent--green {
+    background: var(--color-green);
+  }
+
+  .accent--orange {
+    background: var(--color-orange);
+  }
+
+  .card__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .card__name {
+    margin: 0;
+    font-size: 30px;
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .card__ask {
+    display: inline-flex;
+    align-items: center;
+    align-self: flex-start;
+    gap: 8px;
+    min-height: 44px;
+    font-size: 15px;
+    font-weight: 700;
+  }
+
+  :global(html[lang='my']) .card__name {
+    font-size: 25px;
+    line-height: 1.45;
+  }
+
+  :global(html[lang='my']) .card__ask {
+    line-height: 1.5;
+    letter-spacing: normal;
+  }
+</style>

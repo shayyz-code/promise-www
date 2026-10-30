@@ -1,0 +1,308 @@
+---
+import type { ShelfItem } from '@promise-www/content'
+import Icon from '../../../components/ui/icon.astro'
+import type { IconName } from '../../../components/ui/icons'
+import LogoMark from '../../../components/ui/logo-mark.astro'
+import { localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import type { DeskDictionary } from '../../../i18n/dictionaries/types'
+import type { DeskLinks } from '../desk-links'
+import { latinLang } from '../lang'
+
+interface Props {
+  locale: Locale
+  t: DeskDictionary
+  links: DeskLinks
+  shelf: ShelfItem[]
+}
+
+const { locale, t, links, shelf } = Astro.props
+
+/** Name of the shelf item at a 1-based position, for the hero cards. */
+const shelfName = (position: number): string => {
+  const item = shelf[position - 1]
+  if (!item) throw new Error(`The hero needs shelf item ${position}, but the shelf is shorter.`)
+  return localize(item.name, locale)
+}
+
+interface HeroCard {
+  /** Position, tone, rotation and delay modifier (see the styles). */
+  id: 'pens' | 'tape' | 'journals'
+  num: string
+  icon: IconName
+  name: string
+  delay: string
+}
+
+const cards: HeroCard[] = [
+  { id: 'pens', num: '01', icon: 'pen-detailed', name: shelfName(1), delay: 'pd-d-30' },
+  { id: 'tape', num: '02', icon: 'tape', name: shelfName(3), delay: 'pd-d-42' },
+  { id: 'journals', num: '03', icon: 'journal', name: t.heroJournals, delay: 'pd-d-54' },
+]
+---
+
+<section id="top" aria-labelledby="hero-title" class="pd-wrap hero">
+  <div class="hero__copy">
+    <span class="pd-pill pd-pill-gold pd-mono pd-rise">{t.heroTag}</span>
+    <h1 id="hero-title" class="hero__title pd-display pd-rise pd-d-08">{t.h1a}<span class="chipword chipword--desk">{t.h1Desk}</span>{t.h1b}<span class="chipword chipword--you">{t.h1You}</span>{t.h1c}</h1>
+    <p class="hero__lede pd-rise pd-d-16">{t.heroLede}</p>
+    <div class="hero__ctas pd-rise pd-d-24">
+      <a class="pd-btn pd-btn-tg" href={links.bot.href}>
+        <Icon name="send" size={20} />
+        {t.ctaBot}
+      </a>
+      <a class="pd-btn pd-btn-dc" href={links.discord.href}>
+        <Icon name="users" size={20} />
+        {t.ctaDiscord}
+      </a>
+      <a class="pd-btn pd-btn-gold" href="#shelf">{t.seeShelf}</a>
+    </div>
+    <div class="hero__viber pd-rise pd-d-30">
+      <span>{t.viberAsk}</span>
+      <a class="tap hero__viber-link" href={links.viber}><span class="pd-link">{t.viberPre}{links.primary.number}{t.viberPost}</span></a>
+    </div>
+  </div>
+
+  <div class="hero__media">
+    <div class="hero__stage">
+      {
+        cards.map((card) => (
+          <div class:list={['hero-card', `hero-card--${card.id}`, 'pd-pop', card.delay]}>
+            <span class="hero-card__num pd-mono">{`${t.num} ${card.num}`}</span>
+            <Icon name={card.icon} size={52} strokeWidth={1.6} />
+            <span class="hero-card__name pd-display">{card.name}</span>
+          </div>
+        ))
+      }
+      <div class="badge pd-pop pd-d-70">
+        <a
+          class="badge__link pd-wiggle"
+          href={links.home.href}
+          data-href-en={links.home.en}
+          data-href-my={links.home.my}
+          aria-label={t.badgeLabel}
+        >
+          <LogoMark tone="mono" />
+          <span class="badge__word" lang={latinLang(locale)}>Promise</span>
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 56px 48px;
+    padding-top: clamp(24px, 5vw, 64px);
+    padding-bottom: clamp(72px, 9vw, 120px);
+  }
+
+  .hero__copy {
+    flex: 1 1 480px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 28px;
+  }
+
+  .hero__title {
+    margin: 0;
+    font-size: clamp(52px, 7.4vw, 104px);
+    font-weight: 800;
+    line-height: 0.95;
+    letter-spacing: -0.02em;
+  }
+
+  .chipword {
+    display: inline-block;
+    padding: 0.06em 0.2em 0;
+    border: 3px solid var(--color-navy);
+    border-radius: 18px;
+  }
+
+  .chipword--desk {
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+    box-shadow: 5px 5px 0 var(--color-navy);
+    transform: rotate(-2deg);
+  }
+
+  .chipword--you {
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 5px 5px 0 var(--color-desk-yellow);
+    transform: rotate(1.5deg);
+  }
+
+  .hero__lede {
+    margin: 0;
+    max-width: 32em;
+    font-size: clamp(17px, 1.5vw, 20px);
+    line-height: 1.55;
+    color: var(--color-ink-desk);
+  }
+
+  .hero__ctas {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 16px;
+  }
+
+  .hero__viber {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+    margin-top: -12px;
+    font-size: 16px;
+    color: var(--color-ink-desk);
+  }
+
+  .hero__viber-link {
+    font-weight: 700;
+  }
+
+  /* Three tilted product cards and the round main-site badge */
+  .hero__media {
+    flex: 1 1 380px;
+    min-width: 0;
+    display: flex;
+    justify-content: center;
+  }
+
+  .hero__stage {
+    position: relative;
+    width: 100%;
+    max-width: 500px;
+    aspect-ratio: 1 / 0.96;
+  }
+
+  .hero-card {
+    position: absolute;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    padding: 18px;
+    border: 2px solid var(--color-navy);
+    border-radius: 16px;
+    box-shadow: 5px 5px 0 var(--color-navy);
+  }
+
+  .hero-card--pens {
+    --r: -7deg;
+    left: 0;
+    top: 4%;
+    width: 50%;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 5px 5px 0 var(--color-desk-yellow);
+  }
+
+  .hero-card--pens :global(svg) {
+    color: var(--color-desk-yellow);
+  }
+
+  .hero-card--tape {
+    --r: 6deg;
+    right: 0;
+    top: 0;
+    width: 46%;
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+  }
+
+  .hero-card--journals {
+    --r: -2deg;
+    left: 22%;
+    bottom: 0;
+    width: 50%;
+    background: var(--color-card);
+    color: var(--color-navy);
+  }
+
+  .hero-card__num {
+    font-size: 12px;
+    font-weight: 600;
+  }
+
+  .hero-card__name {
+    font-size: clamp(22px, 3vw, 30px);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .badge {
+    --r: 10deg;
+    position: absolute;
+    right: 4%;
+    top: 46%;
+    z-index: 3;
+    width: 26%;
+    aspect-ratio: 1;
+  }
+
+  .badge__link {
+    box-sizing: border-box;
+    width: 100%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 4px;
+    border: 2px solid var(--color-navy);
+    border-radius: 50%;
+    background-color: var(--color-black);
+    box-shadow: 4px 4px 0 var(--color-navy);
+  }
+
+  .badge__link :global(.logo-mark) {
+    width: 32%;
+    height: auto;
+  }
+
+  .badge__word {
+    font-family: var(--font-sans);
+    font-size: clamp(12px, 1.5vw, 19px);
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+    color: var(--color-white);
+  }
+
+  :global(html[lang='my']) .hero__title {
+    font-size: clamp(44px, 6.3vw, 88px);
+    line-height: 1.35;
+    letter-spacing: normal;
+  }
+
+  :global(html[lang='my']) .chipword {
+    padding: 0.02em 0.2em 0.06em;
+  }
+
+  :global(html[lang='my']) .hero__lede {
+    line-height: 1.7;
+  }
+
+  :global(html[lang='my']) .hero-card__name {
+    font-size: clamp(18px, 2.55vw, 25px);
+    line-height: 1.45;
+  }
+
+  @media (max-width: 480px) {
+    .hero-card {
+      padding: 12px;
+      gap: 6px;
+    }
+
+    .hero-card :global(svg) {
+      width: 36px;
+      height: 36px;
+    }
+  }
+</style>
