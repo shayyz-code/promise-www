@@ -1,0 +1,183 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, discordLabel, telegramHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import { platformNames } from '../brand'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const telegramRows = [
+  { handle: business.telegram.bot, description: t.tgBotDesc },
+  { handle: business.telegram.shop, description: t.tgDirectDesc },
+]
+---
+
+<section id="chat" class="chat" aria-labelledby="chat-title">
+  <h2 id="chat-title" class="sr-only">{t.chatTitle}</h2>
+
+  <div class="card card--telegram home-up-view home-on-tg">
+    <div class="card__head">
+      <span class="card__icon"><Icon name="send" /></span>
+      <h3 class="card__name" lang="en">{platformNames.telegram}</h3>
+    </div>
+    {
+      telegramRows.map((row) => (
+        <a class="telegram-row" href={telegramHref(row.handle)}>
+          <span class="telegram-row__text">
+            <span class="telegram-row__handle" lang="en">{`@${row.handle}`}</span>
+            <span class="telegram-row__desc">{row.description}</span>
+          </span>
+          <Icon class="brand-arrow" name="arrow-right" />
+        </a>
+      ))
+    }
+  </div>
+
+  <a class="card card--discord home-up-view" href={discordHref(business.discordInvite)}>
+    <div class="card__head">
+      <span class="card__icon"><Icon name="users" /></span>
+      <h3 class="card__name" lang="en">{platformNames.discord}</h3>
+    </div>
+    <span class="discord-foot">
+      <span class="discord-foot__text">
+        <span class="discord-foot__join">{t.dcJoin}</span>
+        <span class="discord-foot__invite" lang="en">{discordLabel(business.discordInvite)}</span>
+      </span>
+      <Icon class="brand-arrow" name="arrow-right" />
+    </span>
+  </a>
+</section>
+
+<style>
+  .chat {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter) clamp(64px, 8vw, 96px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 16px;
+  }
+
+  .card {
+    min-width: 0;
+    box-sizing: border-box;
+    border-radius: 10px;
+    color: var(--color-white);
+    display: flex;
+    flex-direction: column;
+  }
+
+  .card--telegram {
+    flex: 3 1 420px;
+    padding: 26px 32px 14px;
+    background: var(--color-telegram);
+    gap: 10px;
+  }
+
+  .card--discord {
+    flex: 2 1 320px;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 26px 32px;
+    background: var(--color-discord);
+    transition: filter 0.3s;
+  }
+
+  .card__head {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .card__icon {
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: center;
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    background: rgb(255 255 255 / 0.16);
+  }
+
+  .card__name {
+    margin: 0;
+    font-size: 28px;
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+
+  .telegram-row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 4px 20px;
+    min-height: 64px;
+    padding: 10px 0;
+    border-top: 1px solid rgb(255 255 255 / 0.32);
+    color: var(--color-white);
+  }
+
+  .telegram-row__text {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 2px 14px;
+  }
+
+  .telegram-row__handle {
+    font-size: 24px;
+    font-weight: 800;
+  }
+
+  .telegram-row__desc {
+    font-size: 19px;
+    font-weight: 700;
+  }
+
+  .discord-foot {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 20px;
+  }
+
+  .discord-foot__text {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+  }
+
+  .discord-foot__join {
+    font-size: 22px;
+    font-weight: 700;
+  }
+
+  .discord-foot__invite {
+    font-size: 15px;
+    font-weight: 500;
+  }
+
+  .chat :global(.brand-arrow) {
+    flex-shrink: 0;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .card--discord:is(:hover, :focus-visible) {
+    filter: brightness(0.88);
+    color: var(--color-white);
+  }
+
+  .card--discord:is(:hover, :focus-visible) :global(.brand-arrow),
+  .telegram-row:is(:hover, :focus-visible) :global(.brand-arrow) {
+    transform: translateX(6px);
+  }
+</style>

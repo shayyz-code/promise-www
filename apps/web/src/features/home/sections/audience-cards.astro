@@ -1,0 +1,188 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { deskLinkAttrs } from '../links'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+---
+
+<section class="audience" aria-label={t.whoLabel}>
+  <div class="card card--office home-up-view home-dark">
+    <div class="card__body">
+      <p class="card__eyebrow home-eyebrow">{t.offEyebrow}</p>
+      <h2 class="card__title home-d3">{t.offH2a}<br />{t.offH2b}</h2>
+      <p class="card__text">{t.offP}</p>
+    </div>
+    <div class="card__foot">
+      <a class="cta home-btn-light home-cta" href="#orders">
+        {t.offCta}
+        <Icon name="arrow-right" size={18} strokeWidth={2.2} />
+      </a>
+      <div class="ream" aria-hidden="true">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+    </div>
+  </div>
+
+  <div class="card card--desk home-up-view">
+    <span class="tape tape--navy home-tape-navy" aria-hidden="true"></span>
+    <span class="tape tape--cream home-tape-cream" aria-hidden="true"></span>
+    <div class="card__body card__body--raised">
+      <p class="home-eyebrow">{t.deskEyebrow}</p>
+      <h2 class="card__title home-d3">{t.deskH2a}<br />{t.deskH2b}</h2>
+      <p class="card__text">{t.deskP}</p>
+    </div>
+    <div>
+      <a class="cta home-btn-on-gold home-cta" {...deskLinkAttrs}>
+        {t.deskVisit}
+        <Icon name="arrow-right" size={18} strokeWidth={2.2} />
+      </a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .audience {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter) clamp(64px, 9vw, 120px);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px;
+  }
+
+  .card {
+    position: relative;
+    flex: 1 1 440px;
+    min-width: 0;
+    min-height: 440px;
+    box-sizing: border-box;
+    padding: clamp(32px, 4vw, 52px);
+    border-radius: 10px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 40px;
+    overflow: hidden;
+  }
+
+  .card--office {
+    background: var(--color-navy);
+    color: var(--color-cream);
+  }
+
+  .card--desk {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+
+  .card__body {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 30em;
+  }
+
+  .card__body--raised {
+    position: relative;
+  }
+
+  .card p {
+    margin: 0;
+  }
+
+  .card__eyebrow {
+    color: var(--color-gold);
+  }
+
+  .card__title {
+    margin: 0;
+    font-size: clamp(28px, 3vw, 40px);
+    font-weight: 800;
+    line-height: 1.04;
+    letter-spacing: -0.03em;
+  }
+
+  .card__text {
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .card--office .card__text {
+    color: var(--color-on-navy);
+  }
+
+  .card__foot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 24px;
+  }
+
+  .cta {
+    padding: 0 26px;
+  }
+
+  /* A little stack of reams. */
+  .ream {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    width: 150px;
+  }
+
+  .ream span {
+    display: block;
+    height: 22px;
+    border-radius: 3px;
+  }
+
+  .ream span:nth-child(1) {
+    margin-left: 10px;
+    background: var(--color-cream);
+  }
+
+  .ream span:nth-child(2) {
+    background: var(--color-gold);
+  }
+
+  .ream span:nth-child(3) {
+    margin-right: 8px;
+    background: var(--color-cream);
+  }
+
+  .ream span:nth-child(4) {
+    margin-left: 4px;
+    background: var(--color-on-navy);
+  }
+
+  .tape {
+    position: absolute;
+  }
+
+  .tape--navy {
+    right: -30px;
+    top: 34px;
+    width: 200px;
+    height: 34px;
+    transform: rotate(28deg);
+  }
+
+  .tape--cream {
+    right: -24px;
+    top: 92px;
+    width: 170px;
+    height: 30px;
+    transform: rotate(-14deg);
+  }
+</style>

@@ -1,0 +1,375 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import LogoMark from '../../../components/ui/logo-mark.astro'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { telegramHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import HandUnderline from '../components/hand-underline.astro'
+import { deskLinkAttrs } from '../links'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const tags = [t.tagGel, t.tagWashi, t.tagJournals, t.tagStickers]
+---
+
+<section id="top" class="hero" aria-labelledby="hero-title">
+  <div class="half half--paper home-ruled">
+    <p class="eyebrow home-eyebrow"><span class="eyebrow__bar" aria-hidden="true"></span>{t.heroEyebrow}</p>
+    <h1 id="hero-title" class="title home-d1">
+      <span class="line"><span>{t.h1a}</span></span>
+      <span class="line"><span>{t.h1b}</span></span>
+      <span class="line"><span>{t.h1c0}<HandUnderline shape="hero">{t.h1cU}</HandUnderline>{t.h1c1}</span></span>
+    </h1>
+    <p class="lead home-up-load">{t.heroLead}</p>
+    <div class="actions home-up-load">
+      <a class="home-btn home-cta" href="#orders">
+        {t.heroCta}
+        <Icon name="arrow-right" size={18} strokeWidth={2.2} />
+      </a>
+      <a class="range-link tap" href="#range"><span class="home-u-on">{t.heroRange}</span></a>
+    </div>
+  </div>
+
+  <div class="half half--desk home-dots">
+    <p class="desk-tag home-pop">{t.deskTag}</p>
+    <h2 class="desk-title home-d3">{t.deskH0}<span class="chip chip--yellow home-pop">{t.deskH1}</span>{t.deskH2}<span class="chip chip--navy home-pop">{t.deskH3}</span>{t.deskH4}</h2>
+    <p class="desk-lead">{t.deskLead}</p>
+    <ul class="tags">
+      {tags.map((tag) => <li class="tag home-pop">{tag}</li>)}
+    </ul>
+    <div class="desk-actions">
+      <a class="sticker sticker--desk" {...deskLinkAttrs}>
+        {t.deskVisit}
+        <Icon name="arrow-right" size={18} strokeWidth={2.4} />
+      </a>
+      <a class="sticker sticker--telegram" href={telegramHref(business.telegram.bot)}>
+        <Icon name="send" size={20} />
+        {t.deskBot}
+      </a>
+    </div>
+
+    <div class="seam" aria-hidden="true">
+      <LogoMark surface="card" draw />
+    </div>
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: stretch;
+    min-height: 620px;
+    margin-bottom: clamp(48px, 6vw, 80px);
+    border-top: 1.5px solid var(--line-soft);
+    border-bottom: 1.5px solid var(--color-navy);
+  }
+
+  .half {
+    min-width: 0;
+    box-sizing: border-box;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  /* Each half lines its outer edge up with the 1200 px page column. */
+  .half--paper {
+    flex: 1.25 1 620px;
+    padding: clamp(48px, 6vw, 88px) clamp(84px, 6.6vw, 96px) clamp(56px, 6vw, 96px)
+      max(var(--gutter), calc(50vw - 552px));
+    gap: 28px;
+  }
+
+  .half--desk {
+    position: relative;
+    flex: 1 1 500px;
+    padding: clamp(48px, 6vw, 88px) max(var(--gutter), calc(50vw - 552px)) clamp(56px, 6vw, 96px)
+      clamp(84px, 6.6vw, 96px);
+    border-left: 2px solid var(--color-navy);
+    gap: 26px;
+  }
+
+  /* Ruled half */
+  .eyebrow {
+    margin: 0;
+    align-self: flex-start;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .eyebrow__bar {
+    display: block;
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-gold);
+  }
+
+  .title {
+    margin: 0;
+    font-size: clamp(40px, 4.1vw, 56px);
+    font-weight: 800;
+    line-height: 0.98;
+    letter-spacing: -0.04em;
+  }
+
+  /* Each headline line rises out of its own mask. */
+  .line {
+    display: block;
+    overflow: hidden;
+    padding-bottom: 0.08em;
+  }
+
+  .line > span {
+    display: block;
+    animation: home-rise 0.95s var(--ease-out) both;
+  }
+
+  .line:nth-child(1) > span {
+    animation-delay: 0.1s;
+  }
+
+  .line:nth-child(2) > span {
+    animation-delay: 0.22s;
+  }
+
+  .line:nth-child(3) > span {
+    animation-delay: 0.34s;
+  }
+
+  .lead {
+    margin: 0;
+    max-width: 30em;
+    color: var(--color-ink-soft);
+    font-size: clamp(17px, 1.4vw, 19px);
+    line-height: 1.55;
+    animation-delay: 0.6s;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+    animation-delay: 0.75s;
+  }
+
+  .range-link {
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  /* Dotted Promise Desk half */
+  .desk-tag {
+    --r: -2deg;
+    align-self: flex-start;
+    margin: 0;
+    padding: 6px 12px;
+    border: 2px solid var(--color-navy);
+    border-radius: 999px;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 3px 3px 0 var(--color-desk-yellow);
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 700;
+    animation-delay: 0.4s;
+  }
+
+  .desk-title {
+    margin: 0;
+    font-family: var(--font-display);
+    font-size: clamp(30px, 2.9vw, 42px);
+    font-weight: 800;
+    line-height: 1.12;
+    letter-spacing: -0.015em;
+  }
+
+  .chip {
+    display: inline-block;
+    padding: 0.06em 0.2em 0;
+    border: 3px solid var(--color-navy);
+    border-radius: 16px;
+  }
+
+  .chip--yellow {
+    --r: -2deg;
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+    box-shadow: 4px 4px 0 var(--color-navy);
+    animation-delay: 0.55s;
+  }
+
+  .chip--navy {
+    --r: 1.5deg;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    box-shadow: 4px 4px 0 var(--color-desk-yellow);
+    animation-delay: 0.7s;
+  }
+
+  .desk-lead {
+    margin: 0;
+    max-width: 28em;
+    color: var(--color-ink-desk);
+    font-size: clamp(17px, 1.4vw, 19px);
+    line-height: 1.55;
+  }
+
+  .tags {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+  }
+
+  .tag {
+    padding: 5px 12px 2px;
+    border: 2px solid var(--color-navy);
+    border-radius: 10px;
+    font-family: var(--font-display);
+    font-size: 17px;
+    font-weight: 700;
+  }
+
+  .tag:nth-child(4n + 1) {
+    --r: -4deg;
+    background: var(--color-pink);
+    animation-delay: 0.85s;
+  }
+
+  .tag:nth-child(4n + 2) {
+    --r: 3deg;
+    background: var(--color-blue);
+    animation-delay: 0.95s;
+  }
+
+  .tag:nth-child(4n + 3) {
+    --r: -2deg;
+    background: var(--color-green);
+    animation-delay: 1.05s;
+  }
+
+  .tag:nth-child(4n + 4) {
+    --r: 4deg;
+    background: var(--color-orange);
+    animation-delay: 1.15s;
+  }
+
+  .desk-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px 16px;
+  }
+
+  /* Sticker buttons with a hard offset shadow (`pd-btn` in the design). */
+  .sticker {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    min-height: 54px;
+    border: 2px solid var(--color-navy);
+    border-radius: 14px;
+    box-shadow: 4px 4px 0 var(--color-navy);
+    font-size: 19px;
+    transition:
+      transform 0.15s ease,
+      box-shadow 0.15s ease;
+  }
+
+  .sticker:is(:hover, :focus-visible) {
+    transform: translate(-2px, -2px);
+    box-shadow: 6px 6px 0 var(--color-navy);
+  }
+
+  .sticker:active {
+    transform: translate(4px, 4px);
+    box-shadow: 0 0 0 var(--color-navy);
+  }
+
+  .sticker--desk {
+    padding: 0 24px;
+    background: var(--color-desk-yellow);
+    color: var(--color-navy);
+    font-weight: 800;
+  }
+
+  .sticker--telegram {
+    padding: 0 20px;
+    background: var(--color-telegram);
+    color: var(--color-white);
+    font-weight: 700;
+  }
+
+  /* The logo badge sits on the seam between the two halves. */
+  .seam {
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 2;
+    width: 136px;
+    height: 136px;
+    margin: -68px 0 0 -68px;
+    border: 2px solid var(--color-navy);
+    border-radius: 50%;
+    background: var(--color-card);
+    box-shadow: 4px 4px 0 var(--color-navy);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+
+  .seam :global(.logo-mark) {
+    width: 44%;
+    height: auto;
+  }
+
+  @media (max-width: 1119px) {
+    .half {
+      padding: clamp(40px, 7vw, 64px) clamp(20px, 5vw, 48px);
+    }
+
+    .half--desk {
+      border-left: none;
+      border-top: 2px solid var(--color-navy);
+    }
+
+    .title {
+      font-size: clamp(40px, 6vw, 56px);
+    }
+
+    .seam {
+      display: none;
+    }
+  }
+
+  /* Myanmar: lines fade up instead of rising out of a mask (stacked marks would be clipped). */
+  :global(html[lang='my']) .line {
+    overflow: visible;
+    padding-bottom: 0;
+  }
+
+  :global(html[lang='my']) .line > span {
+    animation-name: home-up;
+  }
+
+  :global(html[lang='my']) .chip {
+    padding: 0.08em 0.25em 0.04em;
+  }
+
+  /* Myanmar has no monospace face: the tag uses Noto Sans Myanmar like the rest of the page. */
+  :global(html[lang='my']) .desk-tag {
+    font-family: var(--font-sans);
+  }
+</style>

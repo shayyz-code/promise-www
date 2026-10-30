@@ -1,0 +1,261 @@
+---
+import { getDictionary, localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, telegramHref } from '../../../lib/contact'
+import { getBusiness, getFeaturedItems } from '../../../lib/content'
+import HandUnderline from '../components/hand-underline.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const items = await getFeaturedItems()
+---
+
+<section id="desk" class="desk home-dots" aria-labelledby="desk-title">
+  <div class="inner">
+    <div class="intro">
+      <h2 id="desk-title" class="intro__title home-up-view home-d2">{t.dkH0}<HandUnderline shape="circle">{t.dkC}</HandUnderline>{t.dkH1}</h2>
+      <div class="intro__aside home-up-view">
+        <p class="intro__text">{t.dkP}</p>
+        <div class="intro__actions">
+          <a class="cta home-btn home-cta" href={telegramHref(business.telegram.shop)}>{t.dkTg}</a>
+          <a class="cta home-pill home-cta" href={discordHref(business.discordInvite)}>{t.dkDc}</a>
+        </div>
+      </div>
+    </div>
+
+    <div class="board">
+      {
+        items.map((item, index) => (
+          <figure class="polaroid">
+            <span
+              class:list={['polaroid__tape', index % 2 === 0 ? 'home-tape' : 'home-tape-navy']}
+              aria-hidden="true"
+            />
+            {item.image ? (
+              <img
+                class="polaroid__photo polaroid__photo--image"
+                src={item.image.src}
+                alt={localize(item.image.alt, locale)}
+                loading="lazy"
+                decoding="async"
+              />
+            ) : (
+              <div class="polaroid__photo">{t.photo}</div>
+            )}
+            <figcaption class="polaroid__caption">
+              <span class="polaroid__title">{localize(item.title, locale)}</span>
+              <span class="polaroid__text">{localize(item.description, locale)}</span>
+            </figcaption>
+          </figure>
+        ))
+      }
+    </div>
+  </div>
+</section>
+
+<style>
+  .desk {
+    border-top: 1.5px solid var(--line-soft);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 64px;
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 28px 56px;
+  }
+
+  .intro__title {
+    flex: 1 1 520px;
+    min-width: 0;
+  }
+
+  .intro__aside {
+    flex: 1 1 340px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+
+  .intro__text {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .intro__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+  }
+
+  .cta {
+    padding: 0 24px;
+  }
+
+  /* Polaroids taped to a dotted board */
+  .board {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 56px 36px;
+    padding: 12px 8px 0;
+  }
+
+  .polaroid {
+    --r: 0deg;
+    position: relative;
+    margin: 0;
+    padding: 14px 14px 20px;
+    border-radius: 4px;
+    background: var(--color-white);
+    box-shadow:
+      0 1px 0 rgb(30 49 82 / 0.08),
+      0 10px 22px -6px rgb(30 49 82 / 0.22);
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+    transform: rotate(var(--r));
+    transition:
+      transform 0.5s var(--ease-out),
+      box-shadow 0.5s;
+  }
+
+  .polaroid:hover {
+    transform: rotate(0deg) scale(1.03);
+    box-shadow: 0 22px 40px rgb(30 49 82 / 0.2);
+  }
+
+  .polaroid__tape {
+    position: absolute;
+    left: 50%;
+    top: -14px;
+    width: 96px;
+    height: 28px;
+    margin-left: -48px;
+  }
+
+  .polaroid__photo {
+    aspect-ratio: 1 / 1;
+    border-radius: 2px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-ink-muted);
+    font-size: 13px;
+  }
+
+  .polaroid__photo--image {
+    display: block;
+    width: 100%;
+    height: auto;
+    object-fit: cover;
+  }
+
+  .polaroid__caption {
+    display: flex;
+    flex-direction: column;
+    gap: 2px;
+    padding: 0 4px;
+  }
+
+  .polaroid__title {
+    font-size: 20px;
+    font-weight: 700;
+    letter-spacing: -0.015em;
+  }
+
+  .polaroid__text {
+    color: var(--color-ink-muted);
+    font-size: 15px;
+  }
+
+  /* Each polaroid sits at its own angle, with its own tape angle and placeholder tone. */
+  .polaroid:nth-child(6n + 1) {
+    --r: -3deg;
+  }
+
+  .polaroid:nth-child(6n + 1) .polaroid__tape {
+    transform: rotate(-4deg);
+  }
+
+  .polaroid:nth-child(6n + 1) .polaroid__photo {
+    background: var(--color-photo-slate);
+  }
+
+  .polaroid:nth-child(6n + 2) {
+    --r: 2.5deg;
+  }
+
+  .polaroid:nth-child(6n + 2) .polaroid__tape {
+    transform: rotate(3deg);
+  }
+
+  .polaroid:nth-child(6n + 2) .polaroid__photo {
+    background: var(--color-photo-sand);
+  }
+
+  .polaroid:nth-child(6n + 3) {
+    --r: -1.5deg;
+  }
+
+  .polaroid:nth-child(6n + 3) .polaroid__tape {
+    transform: rotate(2deg);
+  }
+
+  .polaroid:nth-child(6n + 3) .polaroid__photo {
+    background: var(--color-photo-parchment);
+  }
+
+  .polaroid:nth-child(6n + 4) {
+    --r: 2deg;
+  }
+
+  .polaroid:nth-child(6n + 4) .polaroid__tape {
+    transform: rotate(-3deg);
+  }
+
+  .polaroid:nth-child(6n + 4) .polaroid__photo {
+    background: var(--color-photo-sand);
+  }
+
+  .polaroid:nth-child(6n + 5) {
+    --r: -2.5deg;
+  }
+
+  .polaroid:nth-child(6n + 5) .polaroid__tape {
+    transform: rotate(4deg);
+  }
+
+  .polaroid:nth-child(6n + 5) .polaroid__photo {
+    background: var(--color-photo-parchment);
+  }
+
+  .polaroid:nth-child(6n + 6) {
+    --r: 1.5deg;
+  }
+
+  .polaroid:nth-child(6n + 6) .polaroid__tape {
+    transform: rotate(-2deg);
+  }
+
+  .polaroid:nth-child(6n + 6) .polaroid__photo {
+    background: var(--color-photo-slate);
+  }
+</style>

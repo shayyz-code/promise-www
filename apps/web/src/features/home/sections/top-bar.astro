@@ -1,0 +1,86 @@
+---
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, telegramHref, telHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import { platformNames } from '../brand'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const [primary] = business.phones
+---
+
+<div class="top-bar home-dark">
+  <div class="inner">
+    <p class="slogan home-eyebrow">{`${t.sloganQ} `}<span class="dot" aria-hidden="true">•</span>{` ${t.sloganP} `}<span class="dot" aria-hidden="true">•</span>{` ${t.sloganS}`}</p>
+    <p class="contacts">
+      <span class="call">{t.topCall}</span>
+      {
+        primary && (
+          <a class="tap link" href={telHref(primary.number)} lang="en">
+            <span class="home-u">{primary.number}</span>
+          </a>
+        )
+      }
+      <span aria-hidden="true">·</span>
+      <a class="tap link" href={telegramHref(business.telegram.shop)} lang="en"><span class="home-u">{platformNames.telegram}<span class="handle">{` @${business.telegram.shop}`}</span></span></a>
+      <span aria-hidden="true">·</span>
+      <a class="tap link" href={discordHref(business.discordInvite)} lang="en"><span class="home-u">{platformNames.discord}</span></a>
+    </p>
+  </div>
+</div>
+
+<style>
+  .top-bar {
+    background: var(--color-navy);
+    color: var(--color-cream);
+    font-size: 13px;
+    font-weight: 500;
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 0 var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 24px;
+  }
+
+  .slogan {
+    margin: 0;
+    font-weight: 600;
+  }
+
+  .dot {
+    color: var(--color-gold);
+  }
+
+  .contacts {
+    margin: 0;
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 8px;
+  }
+
+  .link {
+    color: var(--color-cream);
+    font-weight: 700;
+  }
+
+  @media (max-width: 767px) {
+    .slogan,
+    .call,
+    .handle {
+      display: none;
+    }
+  }
+</style>

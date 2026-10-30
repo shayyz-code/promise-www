@@ -1,0 +1,68 @@
+---
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, telegramHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import { platformNames } from '../brand'
+import RowLink from '../components/row-link.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const { shop, bot } = business.telegram
+---
+
+<section id="community" class="community" aria-labelledby="community-title">
+  <div class="inner">
+    <div class="intro home-up-view">
+      <h2 id="community-title" class="home-d2">{t.cmH2}</h2>
+      <p class="intro__text">{t.cmP}</p>
+    </div>
+    <div class="rows">
+      <RowLink tone="gold" href={discordHref(business.discordInvite)} title={platformNames.discord} titleLang="en">{t.cmDcD}</RowLink>
+      <RowLink tone="gold" href={telegramHref(shop)} title={platformNames.telegram} titleLang="en">{t.cmTg0}<span lang="en">{`@${shop}`}</span>{t.cmTg1}</RowLink>
+      <RowLink tone="gold" href={telegramHref(bot)} title={t.botName}>{t.cmBot0}<span lang="en">{`@${bot}`}</span>{t.cmBot1}</RowLink>
+    </div>
+  </div>
+</section>
+
+<style>
+  .community {
+    background: var(--color-gold);
+    color: var(--color-navy);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 48px;
+  }
+
+  .intro__text {
+    margin: 0;
+    max-width: 28em;
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1.5px solid var(--color-navy);
+  }
+</style>

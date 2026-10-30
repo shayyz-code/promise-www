@@ -1,0 +1,67 @@
+---
+import SkipLink from '../../components/layout/skip-link.astro'
+import TabBar from '../../components/layout/tab-bar.astro'
+import type { TabItem } from '../../components/layout/tab-bar.types'
+import { getDictionary } from '../../i18n'
+import type { Locale } from '../../i18n/config'
+import BaseLayout from '../../layouts/base-layout.astro'
+import { deskHref, deskHrefs } from './links'
+import AudienceCards from './sections/audience-cards.astro'
+import ChatCards from './sections/chat-cards.astro'
+import CommunityLinks from './sections/community-links.astro'
+import DeskShowcase from './sections/desk-showcase.astro'
+import Hero from './sections/hero.astro'
+import OrderingSteps from './sections/ordering-steps.astro'
+import PromiseStatement from './sections/promise-statement.astro'
+import RangeList from './sections/range-list.astro'
+import SiteFooter from './sections/site-footer.astro'
+import SiteHeader from './sections/site-header.astro'
+import Visit from './sections/visit.astro'
+import './home.css'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const common = getDictionary(locale, 'common')
+const t = getDictionary(locale, 'home')
+
+const tabs: TabItem[] = [
+  { id: 'home', label: t.tabHome, href: '#top', sections: ['top'], icon: 'home' },
+  { id: 'order', label: t.tabOrder, href: '#orders', sections: ['orders'], icon: 'clipboard' },
+  { id: 'range', label: t.tabRange, href: '#range', sections: ['range', 'desk'], icon: 'grid' },
+  {
+    id: 'contact',
+    label: t.tabContact,
+    href: '#visit',
+    sections: ['community', 'visit'],
+    icon: 'pin',
+  },
+  { id: 'desk', label: t.tabDesk, href: deskHref, hrefs: deskHrefs, icon: 'pen', feature: true },
+]
+---
+
+<BaseLayout
+  section="home"
+  locale={locale}
+  title={common.homeTitle}
+  description={common.homeDescription}
+  class="home"
+>
+  <SkipLink label={t.skip} variant="home" />
+  <SiteHeader locale={locale} />
+  <main id="main">
+    <Hero locale={locale} />
+    <ChatCards locale={locale} />
+    <PromiseStatement locale={locale} />
+    <AudienceCards locale={locale} />
+    <OrderingSteps locale={locale} />
+    <RangeList locale={locale} />
+    <DeskShowcase locale={locale} />
+    <CommunityLinks locale={locale} />
+    <Visit locale={locale} />
+  </main>
+  <SiteFooter locale={locale} />
+  <TabBar variant="home" label={t.tabNav} items={tabs} />
+</BaseLayout>
