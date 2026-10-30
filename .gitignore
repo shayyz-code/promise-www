@@ -1,0 +1,26 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+.astro/
+.wrangler/
+
+# Test output
+test-results/
+playwright-report/
+blob-report/
+.lighthouseci/
+
+# Env (only the example is committed)
+.env
+.env.*
+!.env.example
+.dev.vars*
+
+# OS / editor
+.DS_Store
+*.log
+.vscode/*
+!.vscode/extensions.json
+.idea/

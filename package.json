@@ -1,0 +1,42 @@
+{
+  "name": "promise-www",
+  "private": true,
+  "type": "module",
+  "description": "Website of Promise Paper & Stationery",
+  "workspaces": [
+    "apps/*",
+    "packages/*"
+  ],
+  "packageManager": "bun@1.3.14",
+  "engines": {
+    "bun": ">=1.3.14",
+    "node": ">=22.23.4"
+  },
+  "scripts": {
+    "dev": "bun run --filter @promise-www/web dev",
+    "build": "bun run --filter @promise-www/web build",
+    "preview": "bun run --filter @promise-www/web preview",
+    "check": "biome ci . && bun run typecheck && bun run test",
+    "typecheck": "bun run --filter '*' typecheck",
+    "test": "bun run --filter '*' test",
+    "test:e2e": "bun run --filter @promise-www/web test:e2e",
+    "test:e2e:deployed": "bun run --filter @promise-www/web test:e2e:deployed",
+    "lhci": "bun run --filter @promise-www/web lhci",
+    "og:generate": "bun run --filter @promise-www/web og:generate",
+    "deploy": "bun run --filter @promise-www/web deploy",
+    "deploy:dry-run": "bun run --filter @promise-www/web deploy:dry-run",
+    "lint": "biome lint .",
+    "lint:fix": "biome check --write .",
+    "format": "biome format --write .",
+    "format:check": "biome format .",
+    "commitlint": "commitlint",
+    "prepare": "lefthook install"
+  },
+  "devDependencies": {
+    "@biomejs/biome": "2.6.4",
+    "@commitlint/cli": "21.2.4",
+    "@commitlint/config-conventional": "21.2.4",
+    "lefthook": "2.2.2",
+    "typescript": "6.0.3"
+  }
+}
