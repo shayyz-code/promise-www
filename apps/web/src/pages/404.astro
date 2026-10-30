@@ -1,0 +1,112 @@
+---
+import LogoMark from '../components/ui/logo-mark.astro'
+import { getDictionary } from '../i18n'
+import { defaultLocale } from '../i18n/config'
+import { localizedPath } from '../i18n/routes'
+import BaseLayout from '../layouts/base-layout.astro'
+
+/*
+ * One static page answers every unknown URL, so it can't know which language the visitor reads: it shows
+ * both, Myanmar first (the home page's default language).
+ */
+const order = [defaultLocale.home, defaultLocale.desk] as const
+const copy = order.map((locale) => ({ locale, ...getDictionary(locale, 'common') }))
+const title = copy.map((entry) => entry.notFoundTitle).join(' · ')
+const description = copy.map((entry) => entry.notFoundBody).join(' ')
+---
+
+<BaseLayout locale={defaultLocale.home} title={title} description={description}>
+  <main id="main" class="not-found">
+    <LogoMark />
+    <p class="not-found__code" lang="en">404</p>
+    {
+      copy.map((entry) => (
+        <section class="not-found__block" lang={entry.locale}>
+          <h1 class="not-found__title">{entry.notFoundTitle}</h1>
+          <p class="not-found__body">{entry.notFoundBody}</p>
+          <a class="not-found__link" href={localizedPath('home', entry.locale)} hreflang={entry.locale}>
+            {entry.notFoundHome}
+          </a>
+        </section>
+      ))
+    }
+  </main>
+</BaseLayout>
+
+<style>
+  .not-found {
+    box-sizing: border-box;
+    display: grid;
+    justify-items: center;
+    gap: 28px;
+    min-height: 100vh;
+    align-content: center;
+    padding: 48px var(--gutter);
+    text-align: center;
+  }
+
+  .not-found :global(.logo-mark) {
+    width: 56px;
+    height: auto;
+  }
+
+  .not-found__code {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    font-weight: 700;
+    letter-spacing: 0.2em;
+    color: var(--color-gold-ink);
+  }
+
+  .not-found__block {
+    max-width: 34rem;
+  }
+
+  .not-found__block + .not-found__block {
+    padding-top: 28px;
+    border-top: 1px solid var(--line-soft);
+  }
+
+  .not-found__title {
+    margin: 0 0 10px;
+    font-size: clamp(28px, 4vw, 40px);
+    font-weight: 800;
+    line-height: 1.15;
+  }
+
+  .not-found__body {
+    margin: 0 0 18px;
+    font-size: 17px;
+    line-height: 1.6;
+    color: var(--color-ink-soft);
+  }
+
+  .not-found__block[lang='my'] .not-found__title {
+    font-size: clamp(24px, 3.4vw, 34px);
+    line-height: 1.45;
+  }
+
+  .not-found__block[lang='my'] .not-found__body {
+    line-height: 1.7;
+  }
+
+  .not-found__link {
+    display: inline-flex;
+    align-items: center;
+    min-height: var(--tap-min);
+    padding: 0 22px;
+    border-radius: 6px;
+    background: var(--color-navy);
+    color: var(--color-cream);
+    font-weight: 700;
+  }
+
+  .not-found__link:hover {
+    background: var(--color-navy-deep);
+  }
+
+  .not-found__link:focus-visible {
+    outline-offset: 4px;
+  }
+</style>

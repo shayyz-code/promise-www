@@ -9,7 +9,8 @@ import '../styles/tokens.css'
 import '../styles/global.css'
 
 interface Props {
-  section: Section
+  /** Omit for pages outside both sections (the 404): no canonical, alternates or JSON-LD. */
+  section?: Section
   locale: Locale
   title: string
   description: string
@@ -18,8 +19,9 @@ interface Props {
 }
 
 const { section, locale, title, description, class: bodyClass } = Astro.props
-const business = await getBusiness()
-const jsonLd = serializeJsonLd(storeJsonLd(business, new URL('/', Astro.site).href))
+const jsonLd = section
+  ? serializeJsonLd(storeJsonLd(await getBusiness(), new URL('/', Astro.site).href))
+  : undefined
 // Order matters: the inline head script reads the hreflang alternates rendered by <SeoHead> above it.
 ---
 
@@ -29,7 +31,17 @@ const jsonLd = serializeJsonLd(storeJsonLd(business, new URL('/', Astro.site).hr
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="format-detection" content="telephone=no" />
-    <SeoHead section={section} locale={locale} title={title} description={description} />
+    {
+      section ? (
+        <SeoHead section={section} locale={locale} title={title} description={description} />
+      ) : (
+        <>
+          <title>{title}</title>
+          <meta name="description" content={description} />
+          <meta name="robots" content="noindex" />
+        </>
+      )
+    }
     <script is:inline set:html={headScript} />
     <Font cssVariable="--font-bricolage" preload={locale === 'en' ? [{ subset: 'latin' }] : false} />
     <Font
@@ -40,7 +52,7 @@ const jsonLd = serializeJsonLd(storeJsonLd(business, new URL('/', Astro.site).hr
     <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
     <meta name="theme-color" content="#1e3152" />
-    <script type="application/ld+json" set:html={jsonLd} />
+    {jsonLd && <script type="application/ld+json" set:html={jsonLd} />}
   </head>
   <body class={bodyClass}>
     <slot />
