@@ -1,0 +1,5 @@
+# Each section's default language has no prefix: send the prefixed duplicates to the canonical URL.
+/my/ / 301
+/my / 301
+/en/desk/ /desk/ 301
+/en/desk /desk/ 301
