@@ -1,0 +1,129 @@
+---
+import LogoMark from '../../../components/ui/logo-mark.astro'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, telegramHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import { copyrightYear, developer } from '../../../lib/site'
+import { platformNames, wordmark } from '../brand'
+import { deskLinkAttrs } from '../links'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const common = getDictionary(locale, 'common')
+const business = await getBusiness()
+---
+
+<footer class="footer home-dark">
+  <div class="inner">
+    <div class="brand" lang="en">
+      <LogoMark tone="inverse" />
+      <span class="wordmark">
+        <span class="wordmark__name">{wordmark.name}</span>
+        <span class="wordmark__tag">{wordmark.tagline}</span>
+      </span>
+    </div>
+    <nav class="nav" aria-label={t.ftNav}>
+      <a class="link tap" href="#orders"><span class="home-u">{t.navOffices}</span></a>
+      <a class="link tap" {...deskLinkAttrs}><span class="home-u">{t.navDesk}</span></a>
+      <a class="link tap" href="#range"><span class="home-u">{t.navRange}</span></a>
+      <a class="link tap" href="#visit"><span class="home-u">{t.navVisit}</span></a>
+      <a class="link tap" href={telegramHref(business.telegram.shop)} lang="en">
+        <span class="home-u">{platformNames.telegram}</span>
+      </a>
+      <a class="link tap" href={discordHref(business.discordInvite)} lang="en">
+        <span class="home-u">{platformNames.discord}</span>
+      </a>
+    </nav>
+    <div class="legal" lang="en">
+      <p>{`© ${copyrightYear} ${business.name} · ${business.domain}`}</p>
+      <p>{`${common.developedBy} `}<a class="link link--strong tap" href={developer.url}><span class="home-u-on">{developer.name}</span></a></p>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .footer {
+    background: var(--color-navy-deep);
+    color: var(--color-cream);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: 48px var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px 40px;
+  }
+
+  .brand {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+
+  .brand :global(.logo-mark) {
+    width: 30px;
+    height: 41px;
+  }
+
+  .wordmark {
+    display: flex;
+    flex-direction: column;
+    gap: 5px;
+  }
+
+  .wordmark__name {
+    font-size: 26px;
+    font-weight: 800;
+    line-height: 0.86;
+    letter-spacing: -0.04em;
+  }
+
+  .wordmark__tag {
+    padding-left: 1px;
+    font-size: 8px;
+    font-weight: 600;
+    letter-spacing: 0.2em;
+  }
+
+  .nav {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0 28px;
+    font-size: 15px;
+    font-weight: 600;
+  }
+
+  .link {
+    color: var(--color-cream);
+  }
+
+  .link--strong {
+    font-weight: 700;
+  }
+
+  .legal {
+    flex-basis: 100%;
+    padding-top: 16px;
+    border-top: 1px solid rgb(247 240 225 / 0.18);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 0 32px;
+    color: var(--color-on-navy-muted);
+    font-size: 14px;
+  }
+
+  .legal p {
+    margin: 0;
+  }
+</style>

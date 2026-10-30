@@ -1,0 +1,121 @@
+---
+/*
+ * A full-width list row that fills with navy on hover (the range and community lists). The description is
+ * the slot, so it can hold sentence fragments and `lang="en"` handles.
+ */
+import Icon from '../../../components/ui/icon.astro'
+import type { Locale } from '../../../i18n/config'
+
+interface Props {
+  href: string
+  /** Per-language targets for links to Promise Desk (rewritten to a saved language choice). */
+  hrefs?: Record<Locale, string> | undefined
+  /** paper: the range list · gold: the community band */
+  tone: 'paper' | 'gold'
+  /** Row number, e.g. `01`. */
+  number?: string
+  title: string
+  /** Set for brand names, which stay in the Latin font on Myanmar pages. */
+  titleLang?: 'en'
+}
+
+const { href, hrefs, tone, number, title, titleLang } = Astro.props
+---
+
+<a
+  class:list={['row', `row--${tone}`]}
+  href={href}
+  data-href-en={hrefs?.en}
+  data-href-my={hrefs?.my}
+>
+  {number && <span class="num">{number}</span>}
+  <h3 class="title home-d4" lang={titleLang}>{title}</h3>
+  <span class="desc"><slot /></span>
+  <Icon class="arrow" name="arrow-right" size={tone === 'gold' ? 28 : 26} />
+</a>
+
+<style>
+  .row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: baseline;
+    gap: 8px 32px;
+    border-top: 1.5px solid var(--color-navy);
+    background: linear-gradient(var(--color-navy), var(--color-navy)) left / 0% 100% no-repeat;
+    transition:
+      background-size 0.55s var(--ease-in-out),
+      color 0.3s;
+  }
+
+  .row--paper {
+    padding: 26px 16px;
+  }
+
+  .row--gold {
+    padding: 28px 16px;
+  }
+
+  .num {
+    flex: 0 0 40px;
+    color: var(--color-gold-ink);
+    font-size: 15px;
+    font-weight: 700;
+    transition: color 0.3s;
+  }
+
+  .title {
+    flex: 0 1 340px;
+    margin: 0;
+    font-size: clamp(26px, 2.8vw, 38px);
+    line-height: 1.1;
+  }
+
+  .row--paper .title {
+    font-weight: 700;
+    letter-spacing: -0.025em;
+  }
+
+  .row--gold .title {
+    font-weight: 800;
+    letter-spacing: -0.03em;
+  }
+
+  .desc {
+    flex: 1 1 280px;
+    line-height: 1.5;
+    transition: color 0.3s;
+  }
+
+  .row--paper .desc {
+    color: var(--color-ink-muted);
+    font-size: 17px;
+  }
+
+  .row--gold .desc {
+    color: var(--color-navy);
+    font-size: 18px;
+    font-weight: 500;
+  }
+
+  .row :global(.arrow) {
+    align-self: center;
+    transition: transform 0.45s var(--ease-out);
+  }
+
+  .row:is(:hover, :focus-visible) {
+    background-size: 100% 100%;
+    color: var(--color-cream);
+  }
+
+  .row:is(:hover, :focus-visible) .num {
+    color: var(--color-gold);
+  }
+
+  .row:is(:hover, :focus-visible) .desc {
+    color: var(--color-on-navy);
+  }
+
+  .row:is(:hover, :focus-visible) :global(.arrow) {
+    transform: translateX(10px);
+  }
+</style>

@@ -1,0 +1,323 @@
+/*
+ * Home page families used by several sections: keyframes, load and scroll animations, paper surfaces, tapes,
+ * the button and link sweeps, display sizes and the Myanmar overrides. Imported once by `home-page.astro`, so
+ * only Home pages load it. Values are copied from the design's `pr-*` and `pd-*` classes.
+ */
+
+/* Keyframes */
+@keyframes home-rise {
+  from {
+    transform: translateY(105%);
+  }
+  to {
+    transform: none;
+  }
+}
+
+@keyframes home-draw {
+  from {
+    stroke-dashoffset: 1;
+  }
+  to {
+    stroke-dashoffset: 0;
+  }
+}
+
+@keyframes home-up {
+  from {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes home-pop {
+  from {
+    opacity: 0;
+    transform: rotate(var(--r, 0deg)) scale(0.8);
+  }
+  to {
+    opacity: 1;
+    transform: rotate(var(--r, 0deg)) scale(1);
+  }
+}
+
+@keyframes home-grow {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+/* Load animations. Delays are set per element by the sections. */
+.home-up-load {
+  animation: home-up 0.9s var(--ease-out) both;
+}
+
+/* Hand-drawn strokes: `pathLength="1"` paths drawn by animating the dash offset. */
+.home-draw {
+  stroke-dasharray: 1;
+  stroke-dashoffset: 0;
+}
+
+.home-draw--load {
+  animation: home-draw 1.4s var(--ease-in-out) both;
+}
+
+/* Desk sticker pop. The tilt comes from `--r`, set per element. */
+.home-pop {
+  transform: rotate(var(--r, 0deg));
+  animation: home-pop 0.55s var(--ease-pop) backwards;
+}
+
+/* Scroll-driven reveals: pure CSS, and simply static where unsupported. */
+@supports (animation-timeline: view()) {
+  .home-draw-view {
+    animation: home-draw linear both;
+    animation-timeline: view();
+    animation-range: entry 35% cover 45%;
+  }
+
+  .home-grow-view {
+    animation: home-grow linear both;
+    animation-timeline: view();
+    animation-range: entry 25% cover 40%;
+  }
+
+  .home-up-view {
+    animation: home-up linear both;
+    animation-timeline: view();
+    animation-range: entry 0% cover 28%;
+  }
+}
+
+/* Surfaces */
+.home-ruled {
+  background-color: var(--color-paper);
+  background-image: repeating-linear-gradient(
+    to bottom,
+    transparent 0 33px,
+    rgb(30 49 82 / 0.13) 33px 34px
+  );
+  background-position: 0 56px;
+}
+
+.home-dots {
+  background-color: var(--color-cream);
+  background-image: radial-gradient(rgb(30 49 82 / 0.16) 1.3px, transparent 1.6px);
+  background-size: 22px 22px;
+}
+
+.home-dark :focus-visible {
+  outline-color: var(--color-gold);
+}
+
+.home-on-tg :focus-visible {
+  outline-color: var(--color-white);
+}
+
+/* Washi tape strips */
+.home-tape {
+  background-color: rgb(213 165 46 / 0.62);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgb(255 255 255 / 0.3) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.home-tape-navy {
+  background-color: rgb(30 49 82 / 0.42);
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgb(255 255 255 / 0.22) 0 6px,
+    transparent 6px 12px
+  );
+}
+
+.home-tape-cream {
+  background-color: rgb(251 247 238 / 0.78);
+  background-image: repeating-linear-gradient(
+    -45deg,
+    rgb(30 49 82 / 0.1) 0 5px,
+    transparent 5px 10px
+  );
+}
+
+/* Type */
+.home-eyebrow {
+  font-size: 13px;
+  font-weight: 700;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+}
+
+/* Section headline (`pr-d2` in the design). `home-d1`, `home-d3` and `home-d4` only carry the Myanmar sizes. */
+.home-d2 {
+  margin: 0;
+  font-size: clamp(34px, 3.6vw, 50px);
+  font-weight: 800;
+  line-height: 1.04;
+  letter-spacing: -0.035em;
+}
+
+/* Buttons: a colour fill sweeps in from the left on hover and focus. */
+.home-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 12px;
+  min-height: 54px;
+  padding: 0 28px;
+  border-radius: 6px;
+  font-size: 17px;
+  font-weight: 700;
+}
+
+.home-btn {
+  background:
+    linear-gradient(var(--color-gold), var(--color-gold)) left / 0% 100% no-repeat var(--color-navy);
+  color: var(--color-cream);
+  transition:
+    background-size 0.5s var(--ease-in-out),
+    color 0.3s;
+}
+
+.home-btn:is(:hover, :focus-visible) {
+  background-size: 100% 100%;
+  color: var(--color-navy);
+}
+
+.home-btn-light {
+  background:
+    linear-gradient(var(--color-gold), var(--color-gold)) left / 0% 100% no-repeat
+    var(--color-cream);
+  color: var(--color-navy);
+  transition: background-size 0.5s var(--ease-in-out);
+}
+
+.home-btn-light:is(:hover, :focus-visible) {
+  background-size: 100% 100%;
+  color: var(--color-navy);
+}
+
+.home-btn-on-gold {
+  background:
+    linear-gradient(var(--color-cream), var(--color-cream)) left / 0% 100% no-repeat
+    var(--color-navy);
+  color: var(--color-cream);
+  transition:
+    background-size 0.5s var(--ease-in-out),
+    color 0.3s;
+}
+
+.home-btn-on-gold:is(:hover, :focus-visible) {
+  background-size: 100% 100%;
+  color: var(--color-navy);
+}
+
+.home-pill {
+  box-shadow: inset 0 0 0 1.5px var(--color-navy);
+  background: linear-gradient(var(--color-navy), var(--color-navy)) left / 0% 100% no-repeat;
+  color: var(--color-navy);
+  transition:
+    background-size 0.45s var(--ease-in-out),
+    color 0.3s;
+}
+
+.home-pill:is(:hover, :focus-visible) {
+  background-size: 100% 100%;
+  color: var(--color-cream);
+}
+
+/* Links: an underline that draws in (`home-u`) or is drawn and wipes out (`home-u-on`, `home-link-on`). */
+.home-u {
+  background: linear-gradient(currentColor, currentColor) left 100% / 0% 2px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.4s var(--ease-in-out);
+}
+
+a:is(:hover, :focus-visible) .home-u {
+  background-size: 100% 2px;
+}
+
+.home-u-on {
+  background: linear-gradient(currentColor, currentColor) left 100% / 100% 2px no-repeat;
+  padding-bottom: 2px;
+  transition: background-size 0.4s var(--ease-in-out);
+}
+
+a:is(:hover, :focus-visible) .home-u-on {
+  background-size: 0% 2px;
+}
+
+.home-link-on {
+  background: linear-gradient(currentColor, currentColor) left bottom / 100% 2px no-repeat;
+  transition: background-size 0.4s var(--ease-in-out);
+}
+
+.home-link-on:is(:hover, :focus-visible) {
+  background-size: 0% 2px;
+}
+
+/*
+ * Myanmar (the design's `.pr-root[lang="my"]` rules). `!important` mirrors the design: relaxed line-heights and
+ * normal tracking must win over every section's own values. English islands (`lang="en"`) keep theirs.
+ */
+html[lang="my"] .home {
+  overflow-wrap: break-word;
+}
+
+html[lang="my"] .home :lang(my) {
+  /* biome-ignore lint/complexity/noImportantStyles: Myanmar script must never be tracked */
+  letter-spacing: normal !important;
+  /* biome-ignore lint/complexity/noImportantStyles: Myanmar script has no case */
+  text-transform: none !important;
+}
+
+html[lang="my"] .home :is(p, li, span, a, dd, dt, address, figcaption, button):not(:lang(en)) {
+  /* biome-ignore lint/complexity/noImportantStyles: Myanmar body copy needs room for stacked marks */
+  line-height: 1.7 !important;
+}
+
+html[lang="my"] .home :is(h1, h2, h3, .home-d1, .home-d2, .home-d3, .home-d4):not(:lang(en)),
+html[lang="my"] .home :is(h1, h2, h3, .home-d1, .home-d2, .home-d3, .home-d4) :not(:lang(en)) {
+  /* biome-ignore lint/complexity/noImportantStyles: Myanmar headings need room for stacked marks */
+  line-height: 1.35 !important;
+}
+
+html[lang="my"] .home .home-stmt.home-stmt {
+  /* biome-ignore lint/complexity/noImportantStyles: the promise statement sits between heading and body */
+  line-height: 1.55 !important;
+}
+
+html[lang="my"] .home .home-eyebrow {
+  font-size: 14px;
+}
+
+/* Display sizes about 15% smaller: Myanmar glyphs are taller and wider at the same size. */
+html[lang="my"] .home .home-d1 {
+  font-size: clamp(34px, 3.4vw, 46px);
+}
+
+html[lang="my"] .home .home-d2 {
+  font-size: clamp(29px, 3.05vw, 42px);
+}
+
+html[lang="my"] .home .home-d3 {
+  font-size: clamp(25px, 2.55vw, 35px);
+}
+
+html[lang="my"] .home .home-d4 {
+  font-size: clamp(22px, 2.4vw, 32px);
+}
+
+@media (max-width: 1119px) {
+  html[lang="my"] .home .home-d1 {
+    font-size: clamp(34px, 5.1vw, 48px);
+  }
+}

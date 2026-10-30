@@ -1,0 +1,141 @@
+---
+import Icon from '../../../components/ui/icon.astro'
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { telegramHref, viberHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const [primary] = business.phones
+const steps = [
+  { title: t.step1T, text: t.step1D },
+  { title: t.step2T, text: t.step2D },
+  { title: t.step3T, text: t.step3D },
+]
+---
+
+<section id="orders" class="orders" aria-labelledby="orders-title">
+  <div class="inner">
+    <div class="intro home-up-view">
+      <h2 id="orders-title" class="home-d2">{t.ordH2}</h2>
+      <p class="intro__text">{t.ordP}</p>
+    </div>
+    <ol class="steps" role="list">
+      {
+        steps.map((step, index) => (
+          <li class="step">
+            <span class="step__rule home-grow-view" aria-hidden="true" />
+            <span class="step__number">{index + 1}</span>
+            <h3 class="step__title">{step.title}</h3>
+            <p class="step__text">{step.text}</p>
+          </li>
+        ))
+      }
+    </ol>
+    <div class="actions">
+      {
+        primary && (
+          <a class="home-btn home-cta" href={viberHref(primary.number)}>
+            {t.ordViber}
+            <Icon name="arrow-right" size={18} strokeWidth={2.2} />
+          </a>
+        )
+      }
+      <a class="alt tap" href={telegramHref(business.telegram.shop)}><span class="home-u-on">{t.ordTg}</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+  .orders {
+    border-top: 1.5px solid var(--line-soft);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .intro {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+    max-width: 780px;
+  }
+
+  .intro__text {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .steps {
+    margin: 0;
+    padding: 0;
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 40px 36px;
+  }
+
+  .step {
+    flex: 1 1 260px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 14px;
+  }
+
+  .step__rule {
+    display: block;
+    height: 3px;
+    background: var(--color-navy);
+    transform-origin: left;
+  }
+
+  .step__number {
+    color: var(--color-gold-ink);
+    font-size: 56px;
+    font-weight: 800;
+    line-height: 1;
+    letter-spacing: -0.04em;
+  }
+
+  .step__title {
+    margin: 0;
+    font-size: 24px;
+    font-weight: 700;
+    line-height: 1.2;
+    letter-spacing: -0.015em;
+  }
+
+  .step__text {
+    margin: 0;
+    color: var(--color-ink-soft);
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 28px;
+  }
+
+  .alt {
+    font-size: 17px;
+    font-weight: 700;
+  }
+</style>

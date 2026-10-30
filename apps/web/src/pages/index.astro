@@ -1,10 +1,5 @@
 ---
-import { getDictionary } from '../i18n'
-import BaseLayout from '../layouts/base-layout.astro'
-
-const t = getDictionary('my', 'common')
+import HomePage from '../features/home/home-page.astro'
 ---
 
-<BaseLayout section="home" locale="my" title={t.homeTitle} description={t.homeDescription}>
-  <main id="main"></main>
-</BaseLayout>
+<HomePage locale="my" />

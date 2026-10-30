@@ -1,0 +1,92 @@
+---
+import { getDictionary, localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { telegramHref, viberHref } from '../../../lib/contact'
+import { getBusiness, getCategories } from '../../../lib/content'
+import { platformNames } from '../brand'
+import RowLink from '../components/row-link.astro'
+import { deskHref, deskHrefs } from '../links'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const [primary] = business.phones
+// Office categories lead to the ordering steps; desk categories lead to Promise Desk.
+const rows = (await getCategories()).map((category, index) => ({
+  id: category.id,
+  number: String(index + 1).padStart(2, '0'),
+  title: localize(category.title, locale),
+  description: localize(category.description, locale),
+  href: category.audience === 'desk' ? deskHref : '#orders',
+  hrefs: category.audience === 'desk' ? deskHrefs : undefined,
+}))
+---
+
+<section id="range" class="range" aria-labelledby="range-title">
+  <div class="inner">
+    <div class="intro home-up-view">
+      <h2 id="range-title" class="home-d2">{t.rangeH2}</h2>
+      <p class="intro__text">{t.rangeP}</p>
+    </div>
+    <div class="rows">
+      {
+        rows.map((row) => (
+          <RowLink tone="paper" href={row.href} hrefs={row.hrefs} number={row.number} title={row.title}>{row.description}</RowLink>
+        ))
+      }
+    </div>
+    <p class="ask">{t.rangeAsk0}{primary && <a class="home-link-on" href={viberHref(primary.number)} lang="en">{platformNames.viber}</a>}{t.rangeAsk1}<a class="home-link-on" href={telegramHref(business.telegram.shop)} lang="en">{platformNames.telegram}</a>{t.rangeAsk2}</p>
+  </div>
+</section>
+
+<style>
+  .range {
+    background: var(--color-paper);
+    border-top: 1.5px solid var(--line-soft);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-direction: column;
+    gap: 56px;
+  }
+
+  .intro {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 16px 48px;
+  }
+
+  .intro__text {
+    margin: 0;
+    max-width: 28em;
+    color: var(--color-ink-soft);
+    font-size: 18px;
+    line-height: 1.55;
+  }
+
+  .rows {
+    display: flex;
+    flex-direction: column;
+    border-bottom: 1.5px solid var(--color-navy);
+  }
+
+  .ask {
+    margin: 0;
+    font-size: 17px;
+    line-height: 1.55;
+  }
+
+  .ask a {
+    font-weight: 700;
+  }
+</style>

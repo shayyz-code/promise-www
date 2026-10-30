@@ -1,0 +1,63 @@
+---
+import { getDictionary } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import HandUnderline from '../components/hand-underline.astro'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+---
+
+<section id="promise" class="promise" aria-labelledby="promise-title">
+  <div class="inner">
+    <h2 id="promise-title" class="label home-eyebrow"><span class="label__bar" aria-hidden="true"></span>{t.promiseLabel}</h2>
+    <p class="statement home-up-view home-d3 home-stmt">{t.pr0}<HandUnderline shape="promise-1">{t.prU1}</HandUnderline>{t.pr1}<HandUnderline shape="promise-2">{t.prU2}</HandUnderline>{t.pr2}<HandUnderline shape="promise-3">{t.prU3}</HandUnderline>{t.pr3}</p>
+  </div>
+</section>
+
+<style>
+  .promise {
+    border-top: 1.5px solid var(--line-soft);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 24px 64px;
+  }
+
+  .label {
+    flex: 0 0 180px;
+    align-self: flex-start;
+    margin: 0;
+    padding-top: 14px;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+
+  .label__bar {
+    display: block;
+    flex-shrink: 0;
+    width: 28px;
+    height: 3px;
+    border-radius: 2px;
+    background: var(--color-gold);
+  }
+
+  .statement {
+    flex: 1 1 560px;
+    min-width: 0;
+    margin: 0;
+    font-size: clamp(26px, 3vw, 42px);
+    font-weight: 700;
+    line-height: 1.22;
+    letter-spacing: -0.025em;
+  }
+</style>

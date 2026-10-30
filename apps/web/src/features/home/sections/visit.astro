@@ -1,0 +1,301 @@
+---
+import { format, getDictionary, localize } from '../../../i18n'
+import type { Locale } from '../../../i18n/config'
+import { discordHref, mailtoHref, telegramHref, telHref, viberHref } from '../../../lib/contact'
+import { getBusiness } from '../../../lib/content'
+import { platformNames } from '../brand'
+
+interface Props {
+  locale: Locale
+}
+
+const { locale } = Astro.props
+const t = getDictionary(locale, 'home')
+const business = await getBusiness()
+const { address, telegram } = business
+const hours = format(t.vHours, {
+  days: localize(business.hours.days, locale),
+  time: localize(business.hours.time, locale),
+})
+const phoneLinks = business.phones.map((phone) => ({
+  number: phone.number,
+  href: telHref(phone.number),
+}))
+const viberLinks = business.phones
+  .filter((phone) => phone.viber)
+  .map((phone) => ({ number: phone.number, href: viberHref(phone.number) }))
+---
+
+<section id="visit" class="visit home-dark" aria-labelledby="visit-title">
+  <div class="inner">
+    <div class="place home-up-view">
+      <h2 id="visit-title" class="home-d2">{t.vH2}</h2>
+      <div class="where">
+        <address lang="en">{`${address.street}, ${address.area},`}<br />{`${address.city} ${address.postalCode}, ${address.country}`}</address>
+        <p class="hours">{hours}</p>
+      </div>
+      <a class="map" href={business.mapUrl}>
+        <span class="road road--across" aria-hidden="true"></span>
+        <span class="road road--down" aria-hidden="true"></span>
+        <span class="road road--lane" aria-hidden="true"></span>
+        <svg class="pin" viewBox="0 0 24 24" width="52" height="52" aria-hidden="true">
+          <path class="pin__body" d="M12 22s-7.5-6.6-7.5-12a7.5 7.5 0 0 1 15 0c0 5.4-7.5 12-7.5 12z"></path>
+          <circle class="pin__dot" cx="12" cy="10" r="2.8"></circle>
+        </svg>
+        <span class="map__label">{t.vMap}</span>
+        <span class="map__name" lang="en">{`${business.name}, ${address.city}`}</span>
+      </a>
+    </div>
+
+    <dl class="contacts">
+      <div class="contact">
+        <dt class="contact__term home-eyebrow">{t.vPhone}</dt>
+        <dd class="contact__list" lang="en">
+          {
+            phoneLinks.map((phone, index) => (
+              <a class:list={['link', 'tap', { 'link--lead': index === 0 }]} href={phone.href}>
+                <span class="home-u">{phone.number}</span>
+              </a>
+            ))
+          }
+        </dd>
+      </div>
+      <div class="contact">
+        <dt class="contact__term home-eyebrow" lang="en">{platformNames.viber}</dt>
+        <dd class="contact__list" lang="en">
+          {
+            viberLinks.map((phone, index) => (
+              <a class:list={['link', 'tap', { 'link--lead': index === 0 }]} href={phone.href}>
+                <span class="home-u">{phone.number}</span>
+              </a>
+            ))
+          }
+        </dd>
+      </div>
+      <div class="contact">
+        <dt class="contact__term home-eyebrow" lang="en">{platformNames.telegram}</dt>
+        <dd class="contact__list">
+          <a class="link link--lead tap" href={telegramHref(telegram.shop)} lang="en">
+            <span class="home-u">{`@${telegram.shop}`}</span>
+          </a>
+          <span class="bot">
+            <a class="link tap" href={telegramHref(telegram.bot)} lang="en">
+              <span class="home-u">{`@${telegram.bot}`}</span>
+            </a>
+            <span class="bot__name">{t.botName}</span>
+          </span>
+        </dd>
+      </div>
+      <div class="contact">
+        <dt class="contact__term home-eyebrow" lang="en">{platformNames.discord}</dt>
+        <dd class="contact__single">
+          <a class="link tap" href={discordHref(business.discordInvite)}>
+            <span class="home-u">{t.dkDc}</span>
+          </a>
+        </dd>
+      </div>
+      <div class="contact">
+        <dt class="contact__term home-eyebrow">{t.vEmail}</dt>
+        <dd class="contact__single" lang="en">
+          <a class="link tap" href={mailtoHref(business.email)}>
+            <span class="home-u">{business.email}</span>
+          </a>
+        </dd>
+      </div>
+    </dl>
+  </div>
+</section>
+
+<style>
+  .visit {
+    background: var(--color-navy);
+    color: var(--color-cream);
+  }
+
+  .inner {
+    max-width: var(--page-max);
+    margin: 0 auto;
+    padding: clamp(64px, 9vw, 120px) var(--gutter);
+    display: flex;
+    flex-wrap: wrap;
+    gap: 56px 72px;
+  }
+
+  .place {
+    flex: 1 1 420px;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 28px;
+  }
+
+  .where {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    font-size: 18px;
+    line-height: 1.5;
+  }
+
+  address {
+    font-style: normal;
+    font-weight: 700;
+  }
+
+  .hours {
+    margin: 0;
+    color: var(--color-on-navy-muted);
+  }
+
+  /* A stylised street map. */
+  .map {
+    position: relative;
+    min-height: 240px;
+    padding: 24px;
+    border: 1.5px solid rgb(247 240 225 / 0.3);
+    border-radius: 10px;
+    background-color: var(--color-navy-map);
+    background-image:
+      linear-gradient(rgb(247 240 225 / 0.08) 2px, transparent 2px),
+      linear-gradient(90deg, rgb(247 240 225 / 0.08) 2px, transparent 2px);
+    background-size: 44px 44px;
+    color: var(--color-cream);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    text-align: center;
+    overflow: hidden;
+  }
+
+  .road {
+    position: absolute;
+    background: rgb(247 240 225 / 0.14);
+  }
+
+  .road--across {
+    left: 0;
+    right: 0;
+    top: 60%;
+    height: 14px;
+  }
+
+  .road--down {
+    top: 0;
+    bottom: 0;
+    left: 30%;
+    width: 12px;
+  }
+
+  .road--lane {
+    top: 0;
+    bottom: 0;
+    left: 72%;
+    width: 8px;
+    background: rgb(247 240 225 / 0.1);
+  }
+
+  .pin {
+    position: relative;
+    transition: transform 0.4s var(--ease-out);
+  }
+
+  .pin__body {
+    fill: var(--color-gold);
+    stroke: var(--color-navy);
+    stroke-width: 1.4;
+    stroke-linejoin: round;
+  }
+
+  .pin__dot {
+    fill: var(--color-navy);
+  }
+
+  .map:is(:hover, :focus-visible) .pin {
+    transform: scale(1.08);
+  }
+
+  .map__label {
+    position: relative;
+    font-size: 18px;
+    font-weight: 700;
+  }
+
+  .map__name {
+    position: relative;
+    color: var(--color-on-navy-muted);
+    font-size: 14px;
+  }
+
+  /* Contact details */
+  .contacts {
+    flex: 1 1 420px;
+    min-width: 0;
+    margin: 0;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px 24px;
+    padding: 20px 0;
+    border-top: 1.5px solid rgb(247 240 225 / 0.25);
+  }
+
+  .contact:last-child {
+    border-bottom: 1.5px solid rgb(247 240 225 / 0.25);
+  }
+
+  .contact__term {
+    flex: 0 0 110px;
+    padding-top: 14px;
+    color: var(--color-gold);
+  }
+
+  .contact__list,
+  .contact__single {
+    flex: 1 1 240px;
+    margin: 0;
+  }
+
+  .contact__list {
+    display: flex;
+    flex-direction: column;
+    font-size: 20px;
+    font-weight: 600;
+  }
+
+  .contact__single {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .link {
+    color: var(--color-cream);
+  }
+
+  .contact__list .link {
+    align-self: flex-start;
+  }
+
+  .link--lead {
+    font-size: 24px;
+    font-weight: 700;
+  }
+
+  .bot {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0 12px;
+  }
+
+  .bot__name {
+    color: var(--color-on-navy-muted);
+    font-size: 15px;
+    font-weight: 500;
+  }
+</style>
