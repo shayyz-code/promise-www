@@ -1,0 +1,60 @@
+/* Design tokens from the Promise design artifact. Feature styles reference these, never raw hex values. */
+:root {
+  /* Brand */
+  --color-navy: #1e3152;
+  --color-navy-deep: #172742;
+  --color-navy-map: #24395f;
+  --color-gold: #d5a52e;
+  --color-gold-ink: #8a6414;
+  --color-cream: #f7f0e1;
+  --color-paper: #fbf7ee;
+  --color-card: #fffdf7;
+  --color-white: #ffffff;
+  --color-black: #000000;
+
+  /* Text */
+  --color-ink-soft: #3a4865;
+  --color-ink-muted: #46546f;
+  --color-ink-desk: #33415e;
+  --color-on-navy: #e6decd;
+  --color-on-navy-muted: #d9d1c0;
+
+  /* Promise Desk */
+  --color-desk-yellow: #ffd23f;
+  --color-pink: #ffc2d1;
+  --color-blue: #b5ddff;
+  --color-yellow: #ffe08a;
+  --color-green: #c4e8b3;
+  --color-orange: #ffc08f;
+
+  /* Photo placeholders */
+  --color-photo-slate: #d8dee8;
+  --color-photo-sand: #f2e2b4;
+  --color-photo-parchment: #e9dfc8;
+
+  /* Chat brands */
+  --color-telegram: #2481cc;
+  --color-discord: #5865f2;
+
+  /* Lines */
+  --line-soft: rgb(30 49 82 / 0.16);
+
+  /* Type: the @font-face families and fallbacks come from the Astro Fonts API variables. */
+  --font-latin: var(--font-bricolage);
+  --font-my: var(--font-myanmar), var(--font-bricolage);
+  --font-mono: ui-monospace, "SF Mono", "Cascadia Code", Menlo, Consolas, monospace;
+  /* Resolved per language island (see global.css): use these in components. */
+  --font-sans: var(--font-latin);
+  --font-display: var(--font-baloo);
+
+  /* Layout */
+  --page-max: 1200px;
+  --gutter: clamp(16px, 4vw, 48px);
+  --tap-min: 44px;
+
+  /* Motion */
+  --ease-out: cubic-bezier(0.2, 0.7, 0.1, 1);
+  --ease-in-out: cubic-bezier(0.65, 0, 0.35, 1);
+  --ease-pop: cubic-bezier(0.34, 1.56, 0.64, 1);
+  --ease-soft: cubic-bezier(0.22, 1, 0.36, 1);
+}

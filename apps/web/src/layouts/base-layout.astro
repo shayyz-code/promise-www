@@ -1,0 +1,51 @@
+---
+import { Font } from 'astro:assets'
+import SeoHead from '../components/layout/seo-head.astro'
+import type { Locale, Section } from '../i18n/config'
+import { getBusiness } from '../lib/content'
+import { serializeJsonLd, storeJsonLd } from '../lib/structured-data'
+import headScript from '../scripts/head.inline.js?raw'
+import '../styles/tokens.css'
+import '../styles/global.css'
+
+interface Props {
+  section: Section
+  locale: Locale
+  title: string
+  description: string
+  /** Class for <body>, for page-level backgrounds. */
+  class?: string
+}
+
+const { section, locale, title, description, class: bodyClass } = Astro.props
+const business = await getBusiness()
+const jsonLd = serializeJsonLd(storeJsonLd(business, new URL('/', Astro.site).href))
+// Order matters: the inline head script reads the hreflang alternates rendered by <SeoHead> above it.
+---
+
+<!doctype html>
+<html lang={locale} dir="ltr">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <meta name="format-detection" content="telephone=no" />
+    <SeoHead section={section} locale={locale} title={title} description={description} />
+    <script is:inline set:html={headScript} />
+    <Font cssVariable="--font-bricolage" preload={locale === 'en' ? [{ subset: 'latin' }] : false} />
+    <Font
+      cssVariable="--font-baloo"
+      preload={section === 'desk' && locale === 'en' ? [{ subset: 'latin' }] : false}
+    />
+    <Font cssVariable="--font-myanmar" preload={locale === 'my' ? [{ weight: '700' }] : false} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <meta name="theme-color" content="#1e3152" />
+    <script type="application/ld+json" set:html={jsonLd} />
+  </head>
+  <body class={bodyClass}>
+    <slot />
+    <script>
+      import '../scripts/language-preference'
+    </script>
+  </body>
+</html>

@@ -1,0 +1,43 @@
+---
+import { SITE_INDEXABLE } from 'astro:env/server'
+import { type Locale, ogLocales, type Section } from '../../i18n/config'
+import { alternates, localizedPath } from '../../i18n/routes'
+
+interface Props {
+  section: Section
+  locale: Locale
+  title: string
+  description: string
+}
+
+const { section, locale, title, description } = Astro.props
+const site = Astro.site
+if (!site) throw new Error('`site` must be set in astro.config.ts (SITE_URL).')
+
+const absolute = (path: string) => new URL(path, site).href
+const canonical = absolute(localizedPath(section, locale))
+const ogImage = absolute(`/og/${section}-${locale}.png`)
+const otherLocale: Locale = locale === 'en' ? 'my' : 'en'
+---
+
+<title>{title}</title>
+<meta name="description" content={description} />
+<link rel="canonical" href={canonical} />
+{
+  alternates(section).map((alternate) => (
+    <link rel="alternate" hreflang={alternate.hreflang} href={absolute(alternate.path)} />
+  ))
+}
+{!SITE_INDEXABLE && <meta name="robots" content="noindex, nofollow" />}
+
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="Promise Paper &amp; Stationery" />
+<meta property="og:title" content={title} />
+<meta property="og:description" content={description} />
+<meta property="og:url" content={canonical} />
+<meta property="og:locale" content={ogLocales[locale]} />
+<meta property="og:locale:alternate" content={ogLocales[otherLocale]} />
+<meta property="og:image" content={ogImage} />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta name="twitter:card" content="summary_large_image" />

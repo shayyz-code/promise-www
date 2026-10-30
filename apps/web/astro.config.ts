@@ -22,6 +22,8 @@ export default defineConfig({
     inlineStylesheets: 'always',
   },
   devToolbar: { enabled: false },
+  // No Markdown content; Shiki's inline styles would also conflict with the CSP.
+  markdown: { syntaxHighlight: false },
   env: {
     schema: {
       SITE_INDEXABLE: envField.boolean({ context: 'server', access: 'public', default: false }),
@@ -48,14 +50,15 @@ export default defineConfig({
       fallbacks: ['Arial Rounded MT Bold', 'system-ui', 'sans-serif'],
     },
     {
-      // Static weights from Fontsource are ~40% smaller than Google's variable Myanmar file.
+      // Static weights from Fontsource are ~40% smaller than Google's variable Myanmar file. No fallbacks:
+      // the stack continues into Bricolage (see `--font-my`) so Latin text inside Myanmar copy stays on-brand.
       provider: fontProviders.fontsource(),
       name: 'Noto Sans Myanmar',
       cssVariable: '--font-myanmar',
       weights: [400, 700],
       styles: ['normal'],
       subsets: ['myanmar'],
-      fallbacks: ['sans-serif'],
+      fallbacks: [],
     },
   ],
   security: {
