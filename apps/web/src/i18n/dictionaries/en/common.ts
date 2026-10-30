@@ -6,7 +6,6 @@ export const common = {
   homeDescription:
     'Copy paper by the ream, files, pens and office essentials, chosen for quality and priced fairly.',
   deskTitle: 'Promise Desk · Stationery for students and creators',
-  deskDescription: 'Stationery for students and creators, picked for colour, feel and fun.',
   notFoundTitle: 'Page not found',
   notFoundBody: 'This page doesn’t exist or has moved.',
   notFoundHome: 'Go to the home page',
