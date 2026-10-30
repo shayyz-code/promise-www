@@ -25,15 +25,16 @@ bun run dev                              # http://localhost:4321
 
 ## Scripts
 
-| Command            | What it does                                                      |
-| ------------------ | ----------------------------------------------------------------- |
-| `bun run dev`      | Astro dev server                                                  |
-| `bun run build`    | Static build into `apps/web/dist`                                 |
-| `bun run preview`  | Serve the build with `wrangler dev` on http://localhost:8787      |
-| `bun run check`    | Biome, type checks and unit tests                                 |
-| `bun run test:e2e` | Playwright end-to-end suite (installs: `bunx playwright install`) |
-| `bun run lhci`     | Lighthouse CI performance budgets                                 |
-| `bun run deploy`   | Build and deploy to Cloudflare (needs `SITE_URL`, see below)      |
+| Command                 | What it does                                                      |
+| ----------------------- | ----------------------------------------------------------------- |
+| `bun run dev`           | Astro dev server                                                  |
+| `bun run build`         | Static build into `apps/web/dist`                                 |
+| `bun run preview`       | Serve the build with `wrangler dev` on http://localhost:8787      |
+| `bun run check`         | Biome, type checks and unit tests                                 |
+| `bun run test:e2e`      | Playwright end-to-end suite (installs: `bunx playwright install`) |
+| `bun run test:e2e:fast` | The same suite on the two Chromium projects                       |
+| `bun run lhci`          | Lighthouse CI performance budgets                                 |
+| `bun run deploy`        | Build and deploy to Cloudflare (needs `SITE_URL`, see below)      |
 
 ## Structure
 
@@ -62,7 +63,8 @@ To deploy from your machine, run `bunx wrangler login` once, then
 localhost `SITE_URL`, because the build bakes it into canonical and share-image URLs.
 
 CI deploys need the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets, plus `SITE_URL` and
-`SITE_INDEXABLE` variables, in the GitHub `production` environment.
+`SITE_INDEXABLE` variables, in the GitHub `production` environment. Keep them on the environment rather than the
+repository: only jobs that pass its required review can read them. Every deploy from `main` waits for that approval.
 
 ## Contributing
 
