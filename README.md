@@ -53,10 +53,10 @@ packages/content    Typed bilingual content shared with the future admin panel
 
 See [`apps/web/.env.example`](apps/web/.env.example).
 
-| Variable         | Default                 | Purpose                                                                                 |
-| ---------------- | ----------------------- | --------------------------------------------------------------------------------------- |
-| `SITE_URL`       | `http://localhost:8787` | Public origin for canonical URLs, hreflang, the sitemap and share images                |
-| `SITE_INDEXABLE` | `false`                 | Allow search engines to index the site. Set it to `true` only on the production domain. |
+| Variable         | Default                 | Purpose                                                                  |
+| ---------------- | ----------------------- | ------------------------------------------------------------------------ |
+| `SITE_URL`       | `http://localhost:8787` | Public origin for canonical URLs, hreflang, the sitemap and share images |
+| `SITE_INDEXABLE` | `false`                 | Allow search engines to index the site. Set it to `true` only at launch. |
 
 To deploy from your machine, run `bunx wrangler login` once, then
 `SITE_URL=https://promise-www.<account>.workers.dev bun run deploy`. The script refuses a missing or
@@ -65,6 +65,8 @@ localhost `SITE_URL`, because the build bakes it into canonical and share-image 
 CI deploys need the `CLOUDFLARE_API_TOKEN` and `CLOUDFLARE_ACCOUNT_ID` secrets, plus `SITE_URL` and
 `SITE_INDEXABLE` variables, in the GitHub `production` environment. Keep them on the environment rather than the
 repository: only jobs that pass its required review can read them. Every deploy from `main` waits for that approval.
+
+To go live, follow the [launch checklist](docs/launch-checklist.md).
 
 ## Contributing
 

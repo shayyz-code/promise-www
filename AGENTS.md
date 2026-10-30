@@ -46,6 +46,7 @@ Node 24.
 - `bun run test:e2e:fast`: the same on the two Chromium projects only.
 - `PLAYWRIGHT_BASE_URL=https://… bun run test:e2e:deployed`: smoke-test a deployed URL.
 - `bun run lhci`: Lighthouse CI performance budgets.
+- `bun run check:seo-build`: audit a production build before it may be indexed. CI runs it before every deploy.
 - `bun run deploy:dry-run` / `bun run deploy`: validate or publish the Worker. Agents only use the dry run.
 
 ## Feedback loop
