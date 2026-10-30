@@ -5,7 +5,8 @@ import { defineConfig, envField, fontProviders } from 'astro/config'
 // The Astro CLI runs on Node, which does not load `.env` into `process.env` for the config itself.
 if (existsSync('.env')) process.loadEnvFile('.env')
 
-const site = new URL(process.env.SITE_URL ?? 'http://localhost:8787').href
+// `||`, not `??`: CI passes an empty string when the variable is unset.
+const site = new URL(process.env.SITE_URL || 'http://localhost:8787').href
 
 // The head bootstrap script must run before first paint, so it is a classic inline script. Astro does not
 // hash `is:inline` scripts for the CSP, so the hash is computed here from the same source file.
