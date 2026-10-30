@@ -22,6 +22,13 @@ test('gives one primary phone and lists every number as a contact point', () => 
   ])
 })
 
+test('places the shop on the map', () => {
+  expect(storeJsonLd(business, siteUrl).geo).toEqual({
+    '@type': 'GeoCoordinates',
+    ...business.geo,
+  })
+})
+
 test('refuses a store without a phone number', () => {
   expect(() => storeJsonLd({ ...business, phones: [] }, siteUrl)).toThrow('phone number')
 })
